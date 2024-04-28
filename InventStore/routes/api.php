@@ -3,6 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ExpenseController;
+use App\Http\Controllers\Api\PosController;
+use App\Http\Controllers\Api\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +30,56 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
     Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);
 
+});
+
+Route::group(['middleware' => 'auth:sanctum'], function(){
+    Route::apiResource('/employee', EmployeeController::class);
+    Route::apiResource('/supplier', SupplierController::class);
+    Route::apiResource('/category', CategoryController::class);
+    Route::apiResource('/product', ProductController::class);
+    Route::apiResource('/expense', ExpenseController::class);
+    Route::apiResource('/customer', CustomerController::class);
+
+    Route::Post('/salary/paid/{id}', [SalaryController::class,'Paid']);
+    Route::Get('/salary', [SalaryController::class, 'AllSalary']);
+
+    Route::Get('/salary/view/{id}', [SalaryController::class, 'ViewSalary']);
+    Route::Get('/edit/salary/{id}', [SalaryController::class, 'EditSalary']);
+    Route::Post('/salary/update/{id}', [SalaryController::class, 'SalaryUpdate']);
+
+    Route::Post('/stock/update/{id}', [ProductController::class, 'StockUpdate']);
+
+    Route::Get('/getting/product/{id}', [PosController::class, 'GetProduct']);
+
+    // Add to cart Route
+    Route::Get('/addToCart/{id}', [CartController::class, 'AddToCart']);
+    Route::Get('/cart/product', [CartController::class, 'CartProduct']);
+
+    Route::Get('/remove/cart/{id}', [CartController::class, 'removeCart']);
+
+    Route::Get('/increment/{id}', [CartController::class, 'increment']);
+    Route::Get('/decrement/{id}', [CartController::class, 'decrement']);
+
+    // Vat Route
+    Route::Get('/vats', [CartController::class, 'Vats']);
+
+    Route::Post('/orderdone', [PosController::class, 'OrderDone']);
+
+    // Order Route
+    Route::Get('/orders', [OrderController::class, 'TodayOrder']);
+
+    Route::Get('/order/details/{id}', [OrderController::class, 'OrderDetails']);
+    Route::Get('/order/orderdetails/{id}', [OrderController::class, 'OrderDetailsAll']);
+
+    Route::Post('/search/order', [PosController::class, 'SearchOrderDate']);
+
+    // Admin Dashboard Route
+
+    Route::Get('/today/sell', [PosController::class, 'TodaySell']);
+    Route::Get('/today/income', [PosController::class, 'TodayIncome']);
+    Route::Get('/today/due', [PosController::class, 'TodayDue']);
+    Route::Get('/today/expense', [PosController::class, 'TodayExpense']);
+    Route::Get('/today/stockout', [PosController::class, 'Stockout']);
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
