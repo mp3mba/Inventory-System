@@ -10,6 +10,9 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\PosController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\SalaryController;
+use App\Http\Controllers\Api\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +28,7 @@ use App\Http\Controllers\Api\CartController;
 Route::group(['prefix' => 'auth'], function ($router) {
 
     Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('signup', [App\Http\Controllers\AuthController::class, 'signup']);
+    Route::post('/signup', [App\Http\Controllers\AuthController::class, 'signup']);
     Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
     Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);

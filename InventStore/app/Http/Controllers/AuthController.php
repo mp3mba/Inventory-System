@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Hash;
+use Hash;
+// use Illuminate\Support\Facades\DB;
+use DB;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -12,7 +17,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users|max:255',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:6'
         ]);
 
         $data = array();
