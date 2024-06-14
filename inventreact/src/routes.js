@@ -4,6 +4,22 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
+// Employee
+const AddEmployee = React.lazy(() => import('./views/employee/add-employee/AddEmployee'))
+const ViewEmployee = React.lazy(() => import('./views/employee/all-employee/AllEmployee'))
+
+//Suppliers
+const AddSupplier = React.lazy(() => import("./views/supplier/AddSupplier"))
+const AllSupplier = React.lazy(() => import("./views/supplier/AllSupplier"))
+
+//category
+const AddCategory = React.lazy(() => import("./views/category/AddCategory"))
+const AllCategory = React.lazy(() => import("./views/category/AllCategory"))
+
+//product
+const AddProduct = React.lazy(() => import('./views/product/add-product'))
+const AllProduct = React.lazy(() => import('./views/product/all-product'))
+
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -95,6 +111,14 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/employee/add-employee', name: 'AddEmployee', element: AddEmployee },
+  { path: '/employee/all-employee', name: 'ViewEmployee', element: ViewEmployee },
+  { path: '/add-supplier', name: 'AddSupplier', element: AddSupplier },
+  { path: '/all-supplier', name: 'AllSupplier', element: AllSupplier },
+  { path: '/all-category', name: 'AllCategory', element: AllCategory },
+  { path: '/add-category', name: 'AddCategory', element: AddCategory },
+  { path: '/add-product', name: 'AddProduct', element: AddProduct },
+  { path: '/all-product', name: 'AllProduct', element: AllProduct },
 ]
 
 export default routes

@@ -29,41 +29,34 @@ const _nav = [
   {
     component: CNavGroup,
     name: 'Employee',
-    to: '/base',
     icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Add Employee',
-        to: '/add-employee',
+        to: '/employee/add-employee',
       },
       {
         component: CNavItem,
-        name: 'View All Employees',
-        to: '/all-employees',
-      },
-      {
-        component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
+        name: 'View All employees',
+        to: '/employee/all-employee',
       },
     ],
   },
   {
     component: CNavGroup,
     name: 'Suppliers',
-    to: '/buttons',
     icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Add Supplier',
-        to: '/buttons/buttons',
+        to: '/add-supplier',
       },
       {
         component: CNavItem,
         name: 'View All Supplier',
-        to: '/buttons/button-groups',
+        to: '/all-supplier',
       },
     ],
   },
@@ -74,21 +67,15 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'All Categories',
-        to: '/forms/form-control',
+        name: 'Add Category',
+        to: '/add-category',
       },
       {
         component: CNavItem,
         name: 'View ALl Categories',
-        to: '/forms/select',
+        to: '/all-category',
       },
     ],
-  },
-  {
-    component: CNavItem,
-    name: 'Charts',
-    to: '/charts',
-    icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,
@@ -98,16 +85,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Add Product',
-        to: '/icons/coreui-icons',
-        badge: {
-          color: 'success',
-          text: 'NEW',
-        },
+        to: '/add-product',
       },
       {
         component: CNavItem,
         name: 'View ALl Product',
-        to: '/icons/flags',
+        to: '/all-product',
       },
     ],
   },
