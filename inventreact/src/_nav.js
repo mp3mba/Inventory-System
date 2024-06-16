@@ -102,16 +102,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Add Customer',
-        to: '/icons/coreui-icons',
-        badge: {
-          color: 'success',
-          text: 'NEW',
-        },
+        to: '/add-customers',
       },
       {
         component: CNavItem,
         name: 'View ALl Customer',
-        to: '/icons/flags',
+        to: '/all-customers',
       },
     ],
   },
@@ -123,16 +119,17 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Add Orders',
-        to: '/icons/coreui-icons',
-        badge: {
-          color: 'success',
-          text: 'NEW',
-        },
+        to: '/add-order',
       },
       {
         component: CNavItem,
-        name: 'View ALl Orders',
-        to: '/icons/flags',
+        name: 'View Order',
+        to: '/view-order',
+      },
+      {
+        component: CNavItem,
+        name: 'Search Orders',
+        to: '/search-order',
       },
     ],
   },
@@ -144,12 +141,12 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Add Expense',
-        to: '/notifications/alerts',
+        to: '/add-expense',
       },
       {
         component: CNavItem,
         name: 'View ALl Expense',
-        to: '/notifications/badges',
+        to: '/all-expense',
       },
     ],
   },
@@ -159,6 +156,12 @@ const _nav = [
     to: '/widgets',
     icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
   },
+  // {
+  //   component: CNavItem,
+  //   name: 'POS',
+  //   to: '/point-of-sale',
+  //   icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+  // },
   // {
   //   component: CNavItem,
   //   name: 'Login',

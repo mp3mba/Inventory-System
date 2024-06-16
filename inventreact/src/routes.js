@@ -20,6 +20,22 @@ const AllCategory = React.lazy(() => import("./views/category/AllCategory"))
 const AddProduct = React.lazy(() => import('./views/product/add-product'))
 const AllProduct = React.lazy(() => import('./views/product/all-product'))
 
+//Customers
+const AddCustomer = React.lazy(() => import('./views/Customer/AddCustomer'))
+const AllCustomer = React.lazy(() => import('./views/Customer/AllCustomer'))
+
+//Orders
+const AddOrder = React.lazy(() => import('./views/orders/AddOrder'))
+const ViewOrder = React.lazy(() => import('./views/orders/ViewOrder'))
+const SearchOrder = React.lazy(() => import('./views/orders/SearchOrder'))
+
+//Expenses
+const AddExpense = React.lazy(() => import('./views/expense/AddExpense'))
+const AllExpense = React.lazy(() => import('./views/expense/AllExpense'))
+
+//POS
+const POS = React.lazy(() => import('./views/pos/pos'))
+
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -119,6 +135,14 @@ const routes = [
   { path: '/add-category', name: 'AddCategory', element: AddCategory },
   { path: '/add-product', name: 'AddProduct', element: AddProduct },
   { path: '/all-product', name: 'AllProduct', element: AllProduct },
+  { path: '/all-customers', name: 'AllCustomer', element: AllCustomer },
+  { path: '/add-customers', name: 'AddCustomer', element: AddCustomer },
+  { path: '/add-order', name: 'AddOrder', element: AddOrder },
+  { path: '/view-order', name: 'ViewOrder', element: ViewOrder },
+  { path: '/search-order', name: 'SearchOrder', element: SearchOrder },
+  { path: '/add-expense', name: 'AddExpense', element: AddExpense },
+  { path: '/all-expense', name: 'AllExpense', element: AllExpense },
+  { path: '/point-of-sale', name: 'POS', element: POS },
 ]
 
 export default routes
