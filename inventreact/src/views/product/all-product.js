@@ -59,9 +59,9 @@ const ProductList = () => {
     <div>
         <div className="row">
             <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
-                <Link to="/add-supplier" style={{  textDecoration:"none", color:'black'}}>
+                <Link to="/add-product" style={{  textDecoration:"none", color:'black'}}>
                     <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
-                    All Categories
+                    Add Products
                 </Link>
             </button>
         </div>

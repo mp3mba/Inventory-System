@@ -36,6 +36,10 @@ const AllExpense = React.lazy(() => import('./views/expense/AllExpense'))
 //POS
 const POS = React.lazy(() => import('./views/pos/pos'))
 
+//Stock
+const Stock = React.lazy(() => import('./views/stock/stock'))
+const StockEdit = React.lazy(() => import('./views/stock/edit-stock'))
+
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
 const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
@@ -143,6 +147,8 @@ const routes = [
   { path: '/add-expense', name: 'AddExpense', element: AddExpense },
   { path: '/all-expense', name: 'AllExpense', element: AllExpense },
   { path: '/point-of-sale', name: 'POS', element: POS },
+  { path: '/stock', name: 'Stock', element: Stock },
+  { path: '/stock-edit', name: 'StockEdit', element: StockEdit },
 ]
 
 export default routes

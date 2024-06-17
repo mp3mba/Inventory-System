@@ -153,7 +153,7 @@ const _nav = [
   {
     component: CNavItem,
     name: 'Stock',
-    to: '/widgets',
+    to: '/stock',
     icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
   },
   // {
