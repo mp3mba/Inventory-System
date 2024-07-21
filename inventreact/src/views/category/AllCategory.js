@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Swal from 'sweetalert2';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
-
-  // Uncomment and modify if you have authentication logic
-  // useEffect(() => {
-  //   if (!User.loggedIn()) {
-  //     history.push('/');
-  //   }
-  // }, [history]);
 
   useEffect(() => {
     allCategory();
   }, []);
 
-  const allCategory = () => {
-    axios.get('/api/category/')
-      .then(({ data }) => setCategories(data))
-      .catch(err => console.error(err));
+  const allCategory = async () => {
+    try{
+      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/category')
+      setCategories(data)
+      console.log(data)
+    }
+    catch (error) {
+      console.error("Error fetching Categories", error);
+    }
   };
 
   const deleteCategory = (id) => {
@@ -44,23 +40,19 @@ const CategoryList = () => {
             Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
           })
           .catch(() => {
-            history.push('/category');
+            history.push('/all-category');
           });
       }
     });
   };
 
-//   const filterSearch = categories.filter(category => {
-//     return category.category_name.toLowerCase().includes(searchTerm.toLowerCase());
-//   });
-
   return (
     <div>
        <div className="row">
-            <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
-                <Link to="/add-supplier" style={{  textDecoration:"none", color:'black'}}>
+            <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "185px", color:"#000"}}>
+                <Link to="/add-category" style={{  textDecoration:"none", color:'black'}}>
                     <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
-                    All Categories
+                    Add Categories
                 </Link>
             </button>
         </div>
@@ -89,17 +81,17 @@ const CategoryList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {filterSearch.map(category => ( */}
-                    <tr key=''>
-                      <td></td>
+                  {categories.map(category => (
+                    <tr key={category.id}>
+                      <td>{category.category_name}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary">Edit</Link>
+                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteCategory(category.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>
                       </td>
                     </tr>
-                  {/* ))} */}
+                  ))}
                 </tbody>
               </table>
             </div>

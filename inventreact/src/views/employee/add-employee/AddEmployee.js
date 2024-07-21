@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Use Link from react-router-dom
+import { Link } from "react-router-dom";
 import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
-
+import CIcon from '@coreui/icons-react';
+import axios from "axios";
+import { data } from "autoprefixer";
 
 const AddEmployee = () => {
   const [form, setForm] = useState({
@@ -10,7 +11,6 @@ const AddEmployee = () => {
     email: '',
     address: '',
     sallery: '',
-    joining_date: '',
     nid: '',
     phone: ''
   });
@@ -23,6 +23,17 @@ const AddEmployee = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    axios.post('http://127.0.0.1:8000/api/v1/employee', form)
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch((error) => {
+      console.error("error submitting form", error)
+    })
+  }
 
   return (
     <>
@@ -44,7 +55,7 @@ const AddEmployee = () => {
                     <div className="text-center">
                       <h1 className="h4 text-gray-900 mb-4">Add Employee</h1>
                     </div>
-                    <form className="user px-3" encType="multipart/form-data">
+                    <form className="user px-3" onSubmit={submitForm} encType="multipart/form-data">
                       <div className="form-group mb-3">
                         <div className="row">
                           <div className="col-md-6">
@@ -113,20 +124,6 @@ const AddEmployee = () => {
                         <div className="row">
                           <div className="col-md-6">
                             <input 
-                              type="date" 
-                              className="form-control" 
-                              id="exampleInputFirstName" 
-                              placeholder="Enter Your Joining Date" 
-                              name="joining_date"
-                              value={form.joining_date}
-                              onChange={handleChange}
-                            />
-                            <small className="text-danger">
-                              {errors.joining_date}
-                            </small>
-                          </div>
-                          <div className="col-md-6">
-                            <input 
                               type="text" 
                               className="form-control" 
                               id="exampleInputFirstName" 
@@ -138,17 +135,13 @@ const AddEmployee = () => {
                             <small className="text-danger">
                               {errors.nid}
                             </small>
-                          </div>     
-                        </div>
-                      </div>
-                      <div className="form-group mb-3">
-                        <div className="row">
+                          </div> 
                           <div className="col-md-6">
                             <input 
-                              type="text" 
+                              type="phone" 
                               className="form-control" 
                               id="exampleInputFirstName" 
-                              placeholder="Enter Your phone Number" 
+                              placeholder="Enter Phone number" 
                               name="phone"
                               value={form.phone}
                               onChange={handleChange}
@@ -157,30 +150,25 @@ const AddEmployee = () => {
                               {errors.phone}
                             </small>
                           </div>
-                          <div className="col-md-6">
-                          </div>     
                         </div>
                       </div>
-                      <div className="form-group mb-3">
-                        <div className="row">
                           <div className="col-md-6">
-                            <input 
-                              type="file" 
-                              className="custom-file-input" 
-                              id="customFile" 
-                            />
-                            <small className="text-danger">
-                              {errors.photo}
-                            </small>
-                            <label className="custom-file-label" htmlFor="customFile">Choose Image file</label>
+                            <div className="d-flex">
+                              <input 
+                                type="file" 
+                                className="custom-file-input" 
+                                id="customFile" 
+                              />
+                              <small className="text-danger">
+                                {errors.photo}
+                              </small>
+                              <label className="p-0" htmlFor="customFile">Choose Image file</label>
+                              <img style={{ height: "35px", width: "35px" }} />
+                            </div>
                           </div>
-                          <div className="col-md-6">
-                            <img style={{ height: "40px", width: "40px" }} />
-                          </div>     
-                        </div>
-                      </div>
+                          
                       <div className="form-group mb-3">
-                        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                        <button type="submit" className="btn btn-primary btn-block">Save</button>
                       </div>
                     </form>
                     <div className="text-center">

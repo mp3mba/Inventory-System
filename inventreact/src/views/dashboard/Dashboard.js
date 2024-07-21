@@ -83,7 +83,7 @@ const Dashboard = () => {
   //   { title: 'LinkedIn', icon: cibLinkedin, percent: 8, value: '27,319' },
   // ]
 
-  const tableExample = [
+  // const tableExample = [
     // {
     //   avatar: { src: avatar1, status: 'success' },
     //   user: {
@@ -172,7 +172,7 @@ const Dashboard = () => {
     //   payment: { name: 'Amex', icon: cibCcAmex },
     //   activity: 'Last week',
     // },
-  ]
+  // ]
 
   return (
     <>

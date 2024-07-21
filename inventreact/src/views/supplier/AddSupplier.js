@@ -15,35 +15,15 @@ const AddSupplier = () => {
     photo: null,
   });
   const [errors, setErrors] = useState({});
-//   const history = useHistory();
-
-  const onFileSelected = (event) => {
-    let file = event.target.files[0];
-    if (file.size > 1048770) {
-      Toast.fire({
-        icon: 'warning',
-        title: 'Uploaded Image is Too Large',
-      });
-    } else {
-      let reader = new FileReader();
-      reader.onload = (event) => {
-        setForm({ ...form, photo: event.target.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const supplierInsert = (e) => {
     e.preventDefault();
-    axios.post('/api/supplier', form)
+    axios.post('http://127.0.0.1:8000/api/v1/supplier', form)
       .then(() => {
-        history.push('/supplier');
-        Toast.fire({
-          icon: 'success',
-          title: 'Supplier Created Successfully',
-        });
+        console.log("supplier added successfull")
+        history.push('/all-supplier');
       })
-      .catch((error) => setErrors(error.response.data.errors));
+      .catch((error) => setErrors(error));
   };
 
   return (
@@ -67,53 +47,57 @@ const AddSupplier = () => {
                       <h1 className="h4 text-gray-900 mb-4">Add Supplier</h1>
                     </div>
                     <form className="user px-3" onSubmit={supplierInsert} encType="multipart/form-data">
-                        <div className="form-group mb-3">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <input
-                                    type="text"
-                                    className="form-control"
-                                    id="exampleInputFirstName"
-                                    placeholder="Enter Your Full Name"
-                                    value={form.name}
-                                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                    />
-                                    {errors.name && <small className="text-danger">{errors.name[0]}</small>}
-                                </div>
-                                <div className="col-md-6">
-                                    <input
-                                    type="email"
-                                    className="form-control"
-                                    id="exampleInputFirstName"
-                                    placeholder="Enter Your Email"
-                                    value={form.email}
-                                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                                    />
-                                    {errors.email && <small className="text-danger">{errors.email[0]}</small>}
-                                </div>
-                            </div>
+                      <div className="form-group mb-3">
+                        <div className="row">
+                          <div className="col-md-6">
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="exampleInputFirstName"
+                              placeholder="Enter Supplier Name"
+                              value={form.name}
+                              name='name'
+                              onChange={(e) => setForm({ ...form, name: e.target.value })}
+                            />
+                              {errors.name && <small className="text-danger">{errors.name[0]}</small>}
+                          </div>
+                          <div className="col-md-6">
+                              <input
+                                  type="email"
+                                  className="form-control"
+                                  id="exampleInputFirstName"
+                                  placeholder="Enter Supplier Email"
+                                  value={form.email}
+                                  name='email'
+                                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                              />
+                              {errors.email && <small className="text-danger">{errors.email[0]}</small>}
+                          </div>
                         </div>
+                      </div>
                         <div className="form-group mb-3">
                             <div className="row">
-                                <div className="col-md-6">
-                                    <input
-                                    type="text"
-                                    className="form-control"
-                                    id="exampleInputFirstName"
-                                    placeholder="Enter Your Address"
-                                    value={form.address}
-                                    onChange={(e) => setForm({ ...form, address: e.target.value })}
-                                    />
-                                    {errors.address && <small className="text-danger">{errors.address[0]}</small>}
+                              <div className="col-md-6">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="exampleInputFirstName"
+                                  placeholder="Enter Supplier Address"
+                                  name='address'
+                                  value={form.address}
+                                  onChange={(e) => setForm({ ...form, address: e.target.value })}
+                                />
+                                  {errors.address && <small className="text-danger">{errors.address[0]}</small>}
                                 </div>
                                 <div className="col-md-6">
                                     <input
-                                    type="text"
-                                    className="form-control"
-                                    id="exampleInputFirstName"
-                                    placeholder="Enter Your Shop Name"
-                                    value={form.shopname}
-                                    onChange={(e) => setForm({ ...form, shopname: e.target.value })}
+                                      type="text"
+                                      className="form-control"
+                                      id="exampleInputFirstName"
+                                      placeholder="Enter Supplier Shop Name"
+                                      name='shopname'
+                                      value={form.shopname}
+                                      onChange={(e) => setForm({ ...form, shopname: e.target.value })}
                                     />
                                     {errors.shopname && <small className="text-danger">{errors.shopname[0]}</small>}
                                 </div>
@@ -123,12 +107,13 @@ const AddSupplier = () => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <input
-                                    type="text"
-                                    className="form-control"
-                                    id="exampleInputFirstName"
-                                    placeholder="Enter Your Phone Number"
-                                    value={form.phone}
-                                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                                      type="text"
+                                      className="form-control"
+                                      id="exampleInputFirstName"
+                                      placeholder="Enter Supplier Phone Number"
+                                      name='phone'
+                                      value={form.phone}
+                                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
                                     />
                                     {errors.phone && <small className="text-danger">{errors.phone[0]}</small>}
                                 </div>
@@ -139,10 +124,9 @@ const AddSupplier = () => {
                             <div className="row">
                                 <div className="col-md-6">
                                     <input
-                                    type="file"
-                                    className="custom-file-input"
-                                    id="customFile"
-                                    onChange={onFileSelected}
+                                      type="file"
+                                      className="custom-file-input"
+                                      id="customFile"
                                     />
                                     {errors.photo && <small className="text-danger">{errors.photo[0]}</small>}
                                     <label className="custom-file-label" htmlFor="customFile">Choose file</label>

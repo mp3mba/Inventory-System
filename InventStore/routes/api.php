@@ -25,17 +25,17 @@ use App\Http\Controllers\Api\OrderController;
 |
 */
 
-Route::group(['prefix' => 'auth'], function ($router) {
+// Route::group(['prefix' => 'auth'], function ($router) {
 
-    Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
-    Route::post('/signup', [App\Http\Controllers\AuthController::class, 'signup']);
-    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
-    Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
-    Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);
+//     Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
+//     Route::post('/signup', [App\Http\Controllers\AuthController::class, 'signup']);
+//     Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
+//     Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
+//     Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);
 
-});
+// });
 
-Route::group(['middleware' => 'auth:sanctum'], function(){
+Route::group(['prefix' => 'v1'],function(){
     Route::apiResource('/employee', EmployeeController::class);
     Route::apiResource('/supplier', SupplierController::class);
     Route::apiResource('/category', CategoryController::class);

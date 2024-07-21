@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import axios from 'axios';
+import axios from 'axios';
 // import Swal from 'sweetalert2';
 
 const EmployeeList = () => {
@@ -18,8 +18,9 @@ const EmployeeList = () => {
 
   const allEmployee = async () => {
     try {
-      // const { data } = await axios.get('/api/employee/');
-      // setEmployees(data);
+      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/employee');
+      setEmployees(data);
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -90,10 +91,11 @@ const EmployeeList = () => {
                 <thead className="thead-light">
                   <tr>
                     <th>Name</th>
-                    <th>Photo</th>
+                    <th>Email</th>
                     <th>Phone</th>
                     <th>Salary</th>
-                    <th>Joining Date</th>
+                    <th>Address</th>
+                    <th>Photo</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -101,12 +103,13 @@ const EmployeeList = () => {
                   {filterSearch.map(employee => (
                     <tr key={employee.id}>
                       <td>{employee.name}</td>
-                      <td><img src={employee.photo} alt="Employee" id="em_photo" /></td>
+                      <td>{employee.email}</td>
                       <td>{employee.phone}</td>
-                      <td>{employee.salary}</td>
-                      <td>{employee.joining_date}</td>
+                      <td>{employee.sallery}</td>
+                      <td>{employee.address}</td>
+                      <td><img src={employee.photo} alt="img" id="em_photo" /></td>
                       <td>
-                        <Link to={{ pathname: `/edit-employee/${employee.id}`, state: { id: employee.id } }} className="btn btn-sm btn-primary">Edit</Link>
+                        <Link to={{ pathname: `/edit-employee/${employee.id}`, state: { id: employee.id } }} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteEmployee(employee.id)} className="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></button>
                       </td>
                     </tr>

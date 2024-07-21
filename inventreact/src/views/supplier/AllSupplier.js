@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Swal from 'sweetalert2';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
 const SupplierList = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
 
   useEffect(() => {
     allSupplier();
   }, []);
 
-  const allSupplier = () => {
-    axios.get('/api/supplier/')
-      .then(({ data }) => setSuppliers(data))
-      .catch(error => console.error(error));
+  const allSupplier = async () => {
+    try{
+      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/supplier')
+      setSuppliers(data)
+      console.log(data)
+    }
+    catch (error) {
+      console.error("Error fetching suppliers:", error);
+    }
   };
 
   const deleteSupplier = (id) => {
@@ -41,15 +44,13 @@ const SupplierList = () => {
             );
           })
           .catch(() => {
-            history.push('/supplier');
+            history.push('/all-supplier');
           });
       }
     });
   };
 
-//   const filtersearch = suppliers.filter(supplier => 
-//     supplier.name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
+  // const filterSearch = suppliers.filter(supplier => supplier.name.includes(searchTerm));
 
   return (
     <div>
@@ -57,7 +58,7 @@ const SupplierList = () => {
         <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
           <Link to="/add-supplier" style={{  textDecoration:"none", color:'black'}}>
             <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
-              Add Category
+              Add Supplier
           </Link>
         </button>
       </div>
@@ -82,29 +83,32 @@ const SupplierList = () => {
                 <thead className="thead-light">
                   <tr>
                     <th>Name</th>
-                    <th>Photo</th>
+                    <th>Email</th>
                     <th>Phone</th>
                     <th>Shop Name</th>
-                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Photo</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {filtersearch.map(supplier => ( */}
-                    <tr key="">
-                      <td>{name}</td>
-                      <td><img src="" id="em_photo" alt="supplier" /></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <Link to="" className="btn btn-sm btn-primary">Edit</Link>
-                        <button onClick={() => deleteSupplier(id)} className="btn btn-sm btn-danger">
-                          <font color="#ffffff">Delete</font>
-                        </button>
-                      </td>
-                    </tr>
-                  {/* ))} */}
+                  {suppliers.map(supplier => (
+                        <tr key={supplier.id}>
+                          <td>{supplier.name}</td>
+                          <td>{supplier.email}</td>
+                          <td>{supplier.phone}</td>
+                          <td>{supplier.shopname}</td>
+                          <td>{supplier.address}</td>
+                          <td><img src={supplier.photo} id="em_photo" alt="supplier" /></td>
+                          <td>
+                            <Link to={{ pathname: `/edit-supplier/${supplier.id}`, state: { id: supplier.id } }} className="btn btn-sm btn-primary m-1">Edit</Link>
+                            <button onClick={() => deleteSupplier(id)} className="btn btn-sm btn-danger">
+                              <font color="#ffffff">Delete</font>
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    )}
                 </tbody>
               </table>
             </div>

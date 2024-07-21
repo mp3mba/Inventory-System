@@ -3,19 +3,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Notification from 'your-notification-library'; // Replace with your notification library
 
 const AddCategory = () => {
   const [form, setForm] = useState({ category_name: '' });
   const [errors, setErrors] = useState({});
-//   const history = useHistory();
-
-  // Uncomment and modify if you have authentication logic
-  // useEffect(() => {
-  //   if (!User.loggedIn()) {
-  //     history.push('/');
-  //   }
-  // }, [history]);
 
   const handleInputChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,19 +14,19 @@ const AddCategory = () => {
 
   const categoryInsert = (e) => {
     e.preventDefault();
-    axios.post('/api/category', form)
+    axios.post('http://127.0.0.1:8000/api/v1/category', form)
       .then(() => {
-        history.push('/category');
-        Notification.success('Category Created Successfully');
+        history.push('/all-category');
+        console.log("category added successful")
       })
-      .catch(error => setErrors(error.response.data.errors));
+      .catch(error => setErrors(error));
   };
 
   return (
     <div>
         <div className="row">
             <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
-                <Link to="/add-supplier" style={{  textDecoration:"none", color:'black'}}>
+                <Link to="/all-category" style={{  textDecoration:"none", color:'black'}}>
                     <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
                     All Categories
                 </Link>
@@ -48,7 +39,7 @@ const AddCategory = () => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="login-form">
-                    <div className="text-center">
+                    <div className="text-center pt-3">
                       <h1 className="h4 text-gray-900 mb-4">Add Category</h1>
                     </div>
                     <form className="user px-3" onSubmit={categoryInsert}>
@@ -59,7 +50,7 @@ const AddCategory = () => {
                               type="text"
                               className="form-control"
                               id="exampleInputFirstName"
-                              placeholder="Enter Your Category Name"
+                              placeholder="Category Name"
                               name="category_name"
                               value={form.category_name}
                               onChange={handleInputChange}
