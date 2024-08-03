@@ -46,6 +46,7 @@ class EmployeeController extends Controller
             'sallery' => 'required',
             'address' => 'required',
             'nid' => 'required',
+            'photo' => 'required',
         ]);
 
         $employee = Employee::create([
@@ -55,6 +56,7 @@ class EmployeeController extends Controller
             'sallery' => $validated['sallery'],
             'address' => $validated['address'],
             'nid' => $validated['nid'],
+            'photo' => $validated['photo']
         ]);
 
         return response()->json(['message' => 'Employee created successfull', 'employee' => $employee]);
@@ -92,40 +94,38 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = array();
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['phone'] = $request->phone;
-        $data['sallery'] = $request->sallery;
-        $data['address'] = $request->address;
-        $data['nid'] = $request->nid;
-        $data['joining_date'] = $request->joining_date;
-        $image = $request->newphoto;
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required|min:10',
+            'sallery' => 'required',
+            'address' => 'required',
+            'nid' => 'required',
+        ]);
 
-        if ($image) {
-         $position = strpos($image, ';');
-         $sub = substr($image, 0, $position);
-         $ext = explode('/', $sub)[1];
-
-         $name = time().".".$ext;
-         $img = Image::make($image)->resize(240,200);
-         $upload_path = 'backend/employee/';
-         $image_url = $upload_path.$name;
-         $success = $img->save($image_url);
-         
-         if ($success) {
-            $data['photo'] = $image_url;
-            $img = Employee::where('id',$id)->first();
-            $image_path = $img->photo;
-            // $done = unlink($image_path);
-            $user  = Employee::where('id',$id)->update($data);
-         }
-          
-        }else{
-            $oldphoto = $request->photo;
-            $data['photo'] = $oldphoto;
-            $user = Employee::where('id',$id)->update($data);
+        // Handle file upload if present
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('photos', 'public');
+            $validated['photo'] = $photoPath;
         }
+
+        $employee = Employee::find($id);
+
+        if ($employee) {
+            $employee->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'sallery' => $validated['sallery'],
+                'address' => $validated['address'],
+                'nid' => $validated['nid'],
+                'photo' => $request['photo']
+            ]);
+        } else {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+
+        return response()->json(['message' => 'Employee updated successfull', 'employee' => $employee]);
     }
 
     /**
@@ -136,14 +136,20 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $employee = Employee::where('id',$id)->first();
-        $photo = $employee->photo;
-        if ($photo) {
-          unlink($photo);
-          Employee::where('id',$id)->delete();
-        }else{
-         Employee::where('id',$id)->delete();
+        $employee = Employee::find($id);
+
+        if ($employee) {
+            $photo = $employee->photo;
+            if ($photo) {
+                unlink($photo);
+            }
+    
+            $employee->delete();
+    
+            return response()->json(['message' => 'Employee deleted successfully', 'employee' => $employee]);
         }
-     }
+    
+        return response()->json(['message' => 'Employee not found'], 404);
+    }
 
 }

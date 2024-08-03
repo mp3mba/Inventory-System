@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Swal from 'sweetalert2';
 
 const AddProduct = () => {
   const [form, setForm] = useState({
@@ -11,47 +10,25 @@ const AddProduct = () => {
     product_code: '',
     category_id: '',
     supplier_id: '',
-    root: '',
     buying_price: '',
     selling_price: '',
     buying_date: '',
-    image: '',
     product_quantity: ''
   });
+
   const [errors, setErrors] = useState({});
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-//   const history = useHistory();
-
-  // Uncomment and modify if you have authentication logic
-  // useEffect(() => {
-  //   if (!User.loggedIn()) {
-  //     history.push('/');
-  //   }
-  // }, [history]);
 
   useEffect(() => {
-    axios.get('/api/category/')
+    axios.get('http://127.0.0.1:8000/api/v1/category')
       .then(({ data }) => setCategories(data))
       .catch(err => console.error(err));
 
-    axios.get('/api/supplier/')
+    axios.get('http://127.0.0.1:8000/api/v1/supplier')
       .then(({ data }) => setSuppliers(data))
       .catch(err => console.error(err));
   }, []);
-
-  const onFileSelected = (event) => {
-    const file = event.target.files[0];
-    if (file.size > 1048770) {
-      Swal.fire('Error', 'Image size should be less than 1MB', 'error');
-    } else {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setForm({ ...form, image: e.target.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,10 +37,9 @@ const AddProduct = () => {
 
   const ProductInsert = (e) => {
     e.preventDefault();
-    axios.post('/api/product', form)
-      .then(() => {
-        history.push('/product');
-        Swal.fire('Success', 'Product added successfully', 'success');
+    axios.post('http://127.0.0.1:8000/api/v1/product', form)
+      .then((response) => {
+        console.log(response.data.message)
       })
       .catch(error => setErrors(error.response.data.errors));
   };
@@ -97,7 +73,7 @@ const AddProduct = () => {
                               type="text"
                               className="form-control"
                               id="productName"
-                              placeholder="Enter Your Product Name"
+                              placeholder="Enter Product Name"
                               name="product_name"
                               value={form.product_name}
                               onChange={handleChange}
@@ -130,9 +106,12 @@ const AddProduct = () => {
                               value={form.category_id}
                               onChange={handleChange}
                             >
-                              {/* {categories.map(category => (
+                              <option>
+                                select category
+                              </option>
+                              {categories.map(category => (
                                 <option key={category.id} value={category.id}>{category.category_name}</option>
-                              ))} */}
+                              ))}
                             </select>
                           </div>
                           <div className="col-md-6">
@@ -144,28 +123,19 @@ const AddProduct = () => {
                               value={form.supplier_id}
                               onChange={handleChange}
                             >
-                              {/* {suppliers.map(supplier => (
+                              <option>
+                                select supplier
+                              </option>
+                              {suppliers.map(supplier => (
                                 <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
-                              ))} */}
+                              ))}
                             </select>
                           </div>
                         </div>
                       </div>
                       <div className="form-group mb-3 ">
                         <div className="row">
-                          <div className="col-md-4">
-                            <label htmlFor="productRoot">Product Root</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="productRoot"
-                              name="root"
-                              value={form.root}
-                              onChange={handleChange}
-                            />
-                            {errors.root && <small className="text-danger">{errors.root[0]}</small>}
-                          </div>
-                          <div className="col-md-4">
+                          <div className="col-md-6">
                             <label htmlFor="buyingPrice">Buying Price</label>
                             <input
                               type="text"
@@ -211,7 +181,7 @@ const AddProduct = () => {
                               type="text"
                               className="form-control"
                               id="productQuantity"
-                              placeholder="Enter Your Quantity"
+                              placeholder="Enter Quantity"
                               name="product_quantity"
                               value={form.product_quantity}
                               onChange={handleChange}
@@ -221,24 +191,7 @@ const AddProduct = () => {
                         </div>
                       </div>
                       <div className="form-group mb-3 ">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="customFile"
-                              onChange={onFileSelected}
-                            />
-                            {errors.image && <small className="text-danger">{errors.image[0]}</small>}
-                            <label className="custom-file-label" htmlFor="customFile">Choose file</label>
-                          </div>
-                          <div className="col-md-6">
-                            {form.image && <img src={form.image} alt="Product" style={{ height: '40px', width: '40px' }} />}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="form-group mb-3 ">
-                        <button type="submit" className="btn btn-primary btn-block">Submit</button>
+                        <button type="submit" className="btn btn-primary btn-block">Save</button>
                       </div>
                     </form>
                     <div className="text-center"></div>

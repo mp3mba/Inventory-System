@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Model\Product;
+use App\Models\Product;
 use DB;
 use Image;
 
@@ -21,7 +21,7 @@ class ProductController extends Controller
         $product = DB::table('products')
         ->join('categories','products.category_id','categories.id')
         ->join('suppliers','products.supplier_id','suppliers.id')
-        ->select('categories.category_name','suppliers.name','products.*')
+        ->select('categories.category_name','suppliers.name as supplier_name','products.*')
         ->orderBy('products.id','DESC')
         ->get();
         return response()->json($product);
@@ -45,57 +45,31 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validateData = $request->validate([
-            'product_name' => 'required|max:255',
-            'product_code' => 'required|unique:products|max:255',
+        $validated = $request->validate([
+            'product_name' => 'required',
+            'product_code' => 'required|unique:products|numeric',
             'category_id' => 'required',
             'supplier_id' => 'required',
-            'buying_price' => 'required',
-            'selling_price' => 'required',
+            'buying_price' => 'required|numeric',
+            'selling_price' => 'required|numeric',
             'buying_date' => 'required',
-            'product_quantity' => 'required',
+            'product_quantity' => 'required|numeric',
    
            ]);
-   
-    if ($request->image) {
-            $position = strpos($request->image, ';');
-            $sub = substr($request->image, 0, $position);
-            $ext = explode('/', $sub)[1];
-   
-            $name = time().".".$ext;
-            $img = Image::make($request->image)->resize(240,200);
-            $upload_path = 'backend/product/';
-            $image_url = $upload_path.$name;
-            $img->save($image_url);
-   
-            $product = new Product;
-            $product->category_id = $request->category_id;
-            $product->product_name = $request->product_name;
-            $product->product_code = $request->product_code;
-            $product->root = $request->root;
-            $product->buying_price = $request->buying_price;
-            $product->selling_price = $request->selling_price;
-            $product->supplier_id = $request->supplier_id;
-            $product->buying_date = $request->buying_date;
-            $product->product_quantity = $request->product_quantity;
-            $product->image = $image_url;
-            $product->save(); 
-        }else{
-           $product = new Product;
-            $product->category_id = $request->category_id;
-            $product->product_name = $request->product_name;
-            $product->product_code = $request->product_code;
-            $product->root = $request->root;
-            $product->buying_price = $request->buying_price;
-            $product->selling_price = $request->selling_price;
-            $product->supplier_id = $request->supplier_id;
-            $product->buying_date = $request->buying_date;
-            $product->product_quantity = $request->product_quantity;
-            
-            $product->save(); 
-   
-        } 
-    }
+
+           $product = Product::create([
+                'product_name' => $validated['product_name'],
+                'product_code' => $validated['product_code'],
+                'category_id' => $validated['category_id'],
+                'supplier_id' => $validated['supplier_id'],
+                'buying_price' => $validated['buying_price'],
+                'selling_price' => $validated['selling_price'],
+                'buying_date' => $validated['buying_date'],
+                'product_quantity' => $validated['product_quantity'],
+           ]);
+           
+           return response()->json(['message' => 'Product created successfull', 'product' => $product]);
+       }
 
     /**
      * Display the specified resource.

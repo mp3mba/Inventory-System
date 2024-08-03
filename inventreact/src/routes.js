@@ -5,6 +5,7 @@ const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 // Employee
 const AddEmployee = React.lazy(() => import('./views/employee/add-employee/AddEmployee'))
 const ViewEmployee = React.lazy(() => import('./views/employee/all-employee/AllEmployee'))
+const EditEmployee = React.lazy(() => import('./views/employee/edit-employee'))
 
 //Suppliers
 const AddSupplier = React.lazy(() => import("./views/supplier/AddSupplier"))
@@ -42,6 +43,7 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/employee/add-employee', name: 'AddEmployee', element: AddEmployee },
   { path: '/employee/all-employee', name: 'ViewEmployee', element: ViewEmployee },
+  { path: '/employee/edit-employee/:id', name: 'EditEmployee', element: EditEmployee },
   { path: '/add-supplier', name: 'AddSupplier', element: AddSupplier },
   { path: '/all-supplier', name: 'AllSupplier', element: AllSupplier },
   { path: '/all-category', name: 'AllCategory', element: AllCategory },

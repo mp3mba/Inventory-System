@@ -3,23 +3,17 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Swal from 'sweetalert2';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
 
   useEffect(() => {
-    // Uncomment and modify if you have authentication logic
-    // if (!User.loggedIn()) {
-    //   history.push('/');
-    // }
     allCustomer();
   }, []);
 
   const allCustomer = () => {
-    axios.get('/api/customer/')
+    axios.get('http://127.0.0.1:8000/api/v1/customer')
       .then(({ data }) => setCustomers(data))
       .catch(error => console.error(error));
   };
@@ -51,9 +45,9 @@ const CustomerList = () => {
     setSearchTerm(e.target.value);
   };
 
-//   const filteredCustomers = customers.filter(customer =>
-//     customer.name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
+  const filteredCustomers = customers.filter(customer =>
+    customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -86,29 +80,27 @@ const CustomerList = () => {
                 <thead className="thead-light">
                   <tr>
                     <th>Name</th>
-                    <th>Photo</th>
-                    <th>Phone</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Address</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {filteredCustomers.map(customer => ( */}
-                    <tr key=''>
-                      <td></td>
-                      <td><img src='' alt="customer" style={{ height: '40px', width: '40px' }} /></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                  {filteredCustomers.map(customer => (
+                    <tr key={customer.id}>
+                      <td>{customer.name}</td>
+                      <td>{customer.email}</td>
+                      <td>{customer.phone}</td>
+                      <td>{customer.address}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary">Edit</Link>
+                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteCustomer(customer.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>
                       </td>
                     </tr>
-                  {/* ))} */}
+                   ))}
                 </tbody>
               </table>
             </div>

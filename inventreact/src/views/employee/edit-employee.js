@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import axios from "axios";
-import { data } from "autoprefixer";
 
-const AddEmployee = () => {
+const EditEmployee = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -13,41 +12,53 @@ const AddEmployee = () => {
     sallery: '',
     nid: '',
     phone: '',
-    photo: '',
+    photo: ''
   });
 
-  const [preview, setPreview] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const allEmployee = async () => {
+      try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/employee/${id}`);
+        console.log(data);
+        setForm({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          sallery: data.sallery,
+          address: data.address,
+          nid: data.nid,
+          photo: data.photo
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    allEmployee();
+  }, [id]);
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "photo" && files[0]) {
-      setForm({
-        ...form,
-        [name]: files[0],
-      });
-      setPreview(URL.createObjectURL(files[0]));
-    } else {
-      setForm({
-        ...form,
-        [name]: value
-      });
-    }
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    for (const key in form) {
-      formData.append(key, form[key]);
-    }
-    axios.post('http://127.0.0.1:8000/api/v1/employee', formData)
-    .then((response) => {
-      console.log(response.data)
-    })
-    .catch((error) => {
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/api/v1/employee/${id}`, form);
+      console.log(response.data);
+      navigate('/employee/all-employee');
+    } catch (error) {
+      console.error("error submitting form", error);
       setErrors(error.response.data.errors);
-    })
+    }
   }
 
   return (
@@ -68,7 +79,7 @@ const AddEmployee = () => {
                 <div className="col-lg-12">
                   <div className="login-form mt-4">
                     <div className="text-center">
-                      <h1 className="h4 text-gray-900 mb-4">Add Employee</h1>
+                      <h1 className="h4 text-gray-900 mb-4">Edit Employee</h1>
                     </div>
                     <form className="user px-3" onSubmit={submitForm} encType="multipart/form-data">
                       <div className="form-group mb-3">
@@ -167,24 +178,21 @@ const AddEmployee = () => {
                           </div>
                         </div>
                       </div>
-                          <div className="col-md-6">
-                            <div className="d-flex">
-                              <input 
-                                type="file" 
-                                name="photo"
-                                className="custom-file-input" 
-                                id="customFile" 
-                                onChange={handleChange}
-                              />
-                              <small className="text-danger">
-                                {errors.photo}
-                              </small>
-                              <label className="p-0" htmlFor="customFile">Choosed Image</label>
-                              {preview && (
-                                <img src={preview} alt="Selected" style={{ height: "35px", width: "35px" }} />
-                              )}                            </div>
-                          </div>
-                          
+                      <div className="col-md-6">
+                        <div className="d-flex">
+                          <input 
+                            type="file" 
+                            name="photo"
+                            className="custom-file-input" 
+                            id="customFile" 
+                          />
+                          <small className="text-danger">
+                            {errors.photo}
+                          </small>
+                          <label className="p-0" htmlFor="customFile">Choose Image file</label>
+                          <img src={form.photo} alt="Current" style={{ height: "35px", width: "35px" }} />
+                        </div>
+                      </div>
                       <div className="form-group mb-3">
                         <button type="submit" className="btn btn-primary btn-block">Save</button>
                       </div>
@@ -204,4 +212,4 @@ const AddEmployee = () => {
   );
 };
 
-export default AddEmployee;
+export default EditEmployee;

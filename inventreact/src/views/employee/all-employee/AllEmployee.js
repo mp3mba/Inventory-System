@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 import axios from 'axios';
-// import Swal from 'sweetalert2';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const history = useHistory();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkAuth();
@@ -27,26 +27,16 @@ const EmployeeList = () => {
   };
 
   const deleteEmployee = async (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then(async (result) => {
-      if (result.value) {
-        try {
-          await axios.delete(`/api/employee/${id}`);
-          setEmployees(employees.filter(employee => employee.id !== id));
-          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-        } catch (error) {
-          console.error(error);
-          history.push('/employee');
-        }
+    if (window.confirm('Are you sure you want to delete this employee?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/employee/${id}`);
+        setEmployees(employees.filter(employee => employee.id !== id));
+        console.log(response.data)
+      } catch (error) {
+        console.error(error);
+        navigate('/employee/all-employee');
       }
-    });
+    }
   };
 
   const checkAuth = async () => {
@@ -58,7 +48,15 @@ const EmployeeList = () => {
     }
   };
 
-  const filterSearch = employees.filter(employee => employee.name.includes(searchTerm));
+  const filterSearch = employees.filter(employee => {
+    const search = searchTerm.toLowerCase().replace(/\s+/g, '')
+    return (
+      employee.name.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      employee.email.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      employee.phone.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      employee.address.toLowerCase().replace(/\s+/g, '').includes(search)
+    );
+  });
 
   return (
     <div>
@@ -107,9 +105,9 @@ const EmployeeList = () => {
                       <td>{employee.phone}</td>
                       <td>{employee.sallery}</td>
                       <td>{employee.address}</td>
-                      <td><img src={employee.photo} alt="img" id="em_photo" /></td>
+                      <td><img src={employee.photo} alt="img" id="em_photo" style={{ height: '50px', width: '50px' }} /></td>
                       <td>
-                        <Link to={{ pathname: `/edit-employee/${employee.id}`, state: { id: employee.id } }} className="btn btn-sm btn-primary m-1">Edit</Link>
+                        <Link to={`/employee/edit-employee/${employee.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteEmployee(employee.id)} className="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></button>
                       </td>
                     </tr>

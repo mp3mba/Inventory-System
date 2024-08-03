@@ -3,23 +3,17 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Swal from 'sweetalert2';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
 
   useEffect(() => {
-    // Uncomment and modify if you have authentication logic
-    // if (!User.loggedIn()) {
-    //   history.push('/');
-    // }
     allProduct();
   }, []);
 
   const allProduct = () => {
-    axios.get('/api/product/')
+    axios.get('http://127.0.0.1:8000/api/v1/product')
       .then(({ data }) => setProducts(data))
       .catch(error => console.error(error));
   };
@@ -51,9 +45,9 @@ const ProductList = () => {
     setSearchTerm(e.target.value);
   };
 
-//   const filteredProducts = products.filter(product =>
-//     product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-//   );
+  const filteredProducts = products.filter(product =>
+    product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -85,34 +79,36 @@ const ProductList = () => {
               <table className="table align-items-center table-flush">
                 <thead className="thead-light">
                   <tr>
-                    <th>Name</th>
-                    <th>Code</th>
-                    <th>Photo</th>
-                    <th>Category</th>
+                    <th>Product Name</th>
+                    <th>Product Code</th>
+                    <th>Product Category</th>
+                    <th>Supplied By</th>
                     <th>Buying Price</th>
                     <th>Selling Price</th>
-                    <th>Root</th>
+                    <th>Buying Date</th>
+                    <th>Qty Available</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {filteredProducts.map(product => ( */}
+                  {filteredProducts.map(product => (
                     <tr key=''>
-                      <td></td>
-                      <td></td>
-                      <td><img src='' alt="product" style={{ height: '40px', width: '40px' }} /></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{product.product_name}</td>
+                      <td>{product.product_code}</td>
+                      <td>{product.category_name}</td>
+                      <td>{product.supplier_name}</td>
+                      <td>{product.buying_price}</td>
+                      <td>{product.selling_price}</td>
+                      <td>{product.buying_date}</td>
+                      <td>{product.product_quantity}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary">Edit</Link>
+                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteProduct(product.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>
                       </td>
                     </tr>
-                  {/* ))} */}
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -3,38 +3,14 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
-// import Swal from 'sweetalert2';
-
 const AddCustomer = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
     address: '',
-    photo: null
   });
   const [errors, setErrors] = useState({});
-//   const history = useHistory();
-
-  // Uncomment and modify if you have authentication logic
-  // useEffect(() => {
-  //   if (!User.loggedIn()) {
-  //     history.push('/');
-  //   }
-  // }, []);
-
-  const onFileSelected = (event) => {
-    let file = event.target.files[0];
-    if (file.size > 1048770) {
-      Swal.fire('Image Validation', 'File size exceeds limit', 'error');
-    } else {
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setForm({ ...form, photo: e.target.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,10 +18,9 @@ const AddCustomer = () => {
 
   const customerInsert = (e) => {
     e.preventDefault();
-    axios.post('/api/customer', form)
-      .then(() => {
-        history.push('/customer');
-        Swal.fire('Success', 'Customer added successfully', 'success');
+    axios.post('http://127.0.0.1:8000/api/v1/customer', form)
+      .then((response) => {
+          console.log(response.data.message)
       })
       .catch(error => setErrors(error.response.data.errors));
   };
@@ -78,7 +53,7 @@ const AddCustomer = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Enter Your Full Name"
+                              placeholder="Customer Full Name"
                               name="name"
                               value={form.name}
                               onChange={handleChange}
@@ -90,7 +65,7 @@ const AddCustomer = () => {
                             <input
                               type="email"
                               className="form-control"
-                              placeholder="Enter Your Email"
+                              placeholder="Customer Email"
                               name="email"
                               value={form.email}
                               onChange={handleChange}
@@ -106,7 +81,7 @@ const AddCustomer = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Enter Your Address"
+                              placeholder="Customer Address"
                               name="address"
                               value={form.address}
                               onChange={handleChange}
@@ -118,29 +93,12 @@ const AddCustomer = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Enter Your Phone"
+                              placeholder="Customer Phone"
                               name="phone"
                               value={form.phone}
                               onChange={handleChange}
                             />
                             {errors.phone && <small className="text-danger">{errors.phone[0]}</small>}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="form-group mb-3">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <input
-                              type="file"
-                              className="custom-file-input"
-                              id="customFile"
-                              onChange={onFileSelected}
-                            />
-                            {errors.photo && <small className="text-danger">{errors.photo[0]}</small>}
-                            <label className="custom-file-label" htmlFor="customFile">Choose file</label>
-                          </div>
-                          <div className="col-md-6">
-                            {form.photo && <img src={form.photo} alt="Customer" style={{ height: '40px', width: '40px' }} />}
                           </div>
                         </div>
                       </div>
