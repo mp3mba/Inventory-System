@@ -43,6 +43,7 @@ const AddEmployee = () => {
     }
     axios.post('http://127.0.0.1:8000/api/v1/employee', formData)
     .then((response) => {
+      navigate('/employee/all-employee');
       console.log(response.data)
     })
     .catch((error) => {
@@ -78,7 +79,7 @@ const AddEmployee = () => {
                               type="text" 
                               className="form-control" 
                               id="exampleInputFirstName" 
-                              placeholder="Enter Your Full Name" 
+                              placeholder="Enter Full Name" 
                               name="name"
                               value={form.name}
                               onChange={handleChange}
@@ -92,7 +93,7 @@ const AddEmployee = () => {
                               type="email" 
                               className="form-control" 
                               id="exampleInputFirstName" 
-                              placeholder="Enter Your Email" 
+                              placeholder="Enter Email" 
                               name="email"
                               value={form.email}
                               onChange={handleChange}
@@ -110,7 +111,7 @@ const AddEmployee = () => {
                               type="text" 
                               className="form-control" 
                               id="exampleInputFirstName" 
-                              placeholder="Enter Your Address" 
+                              placeholder="Enter Address" 
                               name="address"
                               value={form.address}
                               onChange={handleChange}
@@ -182,7 +183,8 @@ const AddEmployee = () => {
                               <label className="p-0" htmlFor="customFile">Choosed Image</label>
                               {preview && (
                                 <img src={preview} alt="Selected" style={{ height: "35px", width: "35px" }} />
-                              )}                            </div>
+                              )}                           
+                            </div>
                           </div>
                           
                       <div className="form-group mb-3">

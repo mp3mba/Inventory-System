@@ -20,7 +20,7 @@ const EmployeeList = () => {
     try {
       const { data } = await axios.get('http://127.0.0.1:8000/api/v1/employee');
       setEmployees(data);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -31,9 +31,9 @@ const EmployeeList = () => {
       try {
         const response = await axios.delete(`http://127.0.0.1:8000/api/v1/employee/${id}`);
         setEmployees(employees.filter(employee => employee.id !== id));
-        console.log(response.data)
+        // console.log(response.data)
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         navigate('/employee/all-employee');
       }
     }
@@ -105,7 +105,7 @@ const EmployeeList = () => {
                       <td>{employee.phone}</td>
                       <td>{employee.sallery}</td>
                       <td>{employee.address}</td>
-                      <td><img src={employee.photo} alt="img" id="em_photo" style={{ height: '50px', width: '50px' }} /></td>
+                      <td><img src={`http://127.0.0.1:8000/storage/${employee.photo}`} alt="img" id="em_photo" style={{ height: '50px', width: '50px' }} /></td>
                       <td>
                         <Link to={`/employee/edit-employee/${employee.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteEmployee(employee.id)} className="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></button>

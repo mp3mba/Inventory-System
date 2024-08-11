@@ -46,8 +46,13 @@ class EmployeeController extends Controller
             'sallery' => 'required',
             'address' => 'required',
             'nid' => 'required',
-            'photo' => 'required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
+
+        $path = null;
+        if ($request->file('photo')) {
+            $path = $request->file('photo')->store('images', 'public');
+        }
 
         $employee = Employee::create([
             'name' => $validated['name'],
@@ -56,7 +61,7 @@ class EmployeeController extends Controller
             'sallery' => $validated['sallery'],
             'address' => $validated['address'],
             'nid' => $validated['nid'],
-            'photo' => $validated['photo']
+            'photo' => $path
         ]);
 
         return response()->json(['message' => 'Employee created successfull', 'employee' => $employee]);
@@ -101,12 +106,14 @@ class EmployeeController extends Controller
             'sallery' => 'required',
             'address' => 'required',
             'nid' => 'required',
+            'photo' => 'sometimes|max:10240',
+            // 'photo' => 'sometimes|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            // 'photo' => 'nullable|file|max:10240',
         ]);
 
         // Handle file upload if present
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('photos', 'public');
-            $validated['photo'] = $photoPath;
+        if ($request->file('photo')) {
+            $path = $request->file('photo')->store('images', 'public');
         }
 
         $employee = Employee::find($id);
@@ -119,7 +126,7 @@ class EmployeeController extends Controller
                 'sallery' => $validated['sallery'],
                 'address' => $validated['address'],
                 'nid' => $validated['nid'],
-                'photo' => $request['photo']
+                'photo' => isset($path) ? $path : $employee->photo
             ]);
         } else {
             return response()->json(['message' => 'Employee not found'], 404);
@@ -138,18 +145,27 @@ class EmployeeController extends Controller
     {
         $employee = Employee::find($id);
 
-        if ($employee) {
-            $photo = $employee->photo;
-            if ($photo) {
-                unlink($photo);
-            }
-    
-            $employee->delete();
-    
-            return response()->json(['message' => 'Employee deleted successfully', 'employee' => $employee]);
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
         }
     
-        return response()->json(['message' => 'Employee not found'], 404);
+        // Check if the employee has a photo and delete it
+        if ($employee->photo) {
+            $photoPath = storage_path('app/public/' . $employee->photo);
+    
+            if (file_exists($photoPath)) {
+                try {
+                    unlink($photoPath);
+                } catch (\Exception $e) {
+                    return response()->json(['message' => 'Failed to delete photo', 'error' => $e->getMessage()], 500);
+                }
+            }
+        }
+    
+        // Delete the employee record from the database
+        $employee->delete();
+    
+        return response()->json(['message' => 'Employee deleted successfully']);
     }
 
 }
