@@ -52,36 +52,16 @@ const EditEmployee = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     await axios.put(`http://127.0.0.1:8000/api/v1/employee/${id}`, form);
-  //     navigate('/employee/all-employee');
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error);
-  //     setErrors(error.response?.data?.errors || {});
-  //   }
-  // };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try  {
-
-      const formData = new FormData();
-      for (const key in form) {
-        formData.append(key, form[key]);
-      }
-      console.log(formData)
-      axios.put(`http://127.0.0.1:8000/api/v1/employee/${id}`, formData)
-      // .then((response) => {
-        navigate('/employee/all-employee');
-        console.log(response.data)
-      // }
-    // )
-    } catch(error) {
-      setErrors(error.response.data.errors);
+    try {
+      await axios.put(`http://127.0.0.1:8000/api/v1/employee/${id}`, form);
+      navigate('/employee/all-employee');
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setErrors(error.response?.data?.errors || {});
     }
-  // )
-  }
+  };
 
   const renderInput = (type, name, placeholder) => (
     <input
