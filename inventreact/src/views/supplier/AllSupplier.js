@@ -87,7 +87,6 @@ const SupplierList = () => {
                     <th>Phone</th>
                     <th>Shop Name</th>
                     <th>Address</th>
-                    <th>Photo</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -99,9 +98,8 @@ const SupplierList = () => {
                           <td>{supplier.phone}</td>
                           <td>{supplier.shopname}</td>
                           <td>{supplier.address}</td>
-                          <td><img src={supplier.photo} id="em_photo" alt="supplier" /></td>
                           <td>
-                            <Link to={{ pathname: `/edit-supplier/${supplier.id}`, state: { id: supplier.id } }} className="btn btn-sm btn-primary m-1">Edit</Link>
+                            <Link to={{ pathname: `/edit-supplier/${supplier.id}` }} className="btn btn-sm btn-primary m-1">Edit</Link>
                             <button onClick={() => deleteSupplier(id)} className="btn btn-sm btn-danger">
                               <font color="#ffffff">Delete</font>
                             </button>

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Toast from 'your-toast-library'; 
 
 const AddSupplier = () => {
   const [form, setForm] = useState({
@@ -12,16 +11,31 @@ const AddSupplier = () => {
     phone: '',
     shopname: '',
     address: '',
-    photo: null,
   });
   const [errors, setErrors] = useState({});
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/supplier/${id}`);
+        setForm(data);
+      } catch (error) {
+        console.error("Error fetching supplier data:", error);
+      }
+    };
+
+    fetchSuppliers();
+  }, [id]);
+
   const supplierInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/supplier', form)
+    axios.put(`http://127.0.0.1:8000/api/v1/supplier/${id}`, form)
       .then(() => {
         console.log("supplier added successfull")
-        history.push('/all-supplier');
+        navigate('/all-supplier');
       })
       .catch((error) => setErrors(error));
   };

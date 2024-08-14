@@ -18,6 +18,7 @@ const EditEmployee = () => {
   const [form, setForm] = useState(initialFormState);
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
+  
   const navigate = useNavigate();
   const { id } = useParams();
 
