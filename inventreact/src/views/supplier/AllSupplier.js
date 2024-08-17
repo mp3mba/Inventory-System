@@ -16,41 +16,33 @@ const SupplierList = () => {
     try{
       const { data } = await axios.get('http://127.0.0.1:8000/api/v1/supplier')
       setSuppliers(data)
-      console.log(data)
     }
     catch (error) {
       console.error("Error fetching suppliers:", error);
     }
   };
 
-  const deleteSupplier = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.value) {
-        axios.delete(`/api/supplier/${id}`)
-          .then(() => {
-            setSuppliers(suppliers.filter(supplier => supplier.id !== id));
-            Swal.fire(
-              'Deleted!',
-              'Your file has been deleted.',
-              'success'
-            );
-          })
-          .catch(() => {
-            history.push('/all-supplier');
-          });
+  const deleteSupplier = async (id) => {
+    if (window.confirm('Are you sure you want to delete this supplier?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/supplier/${id}`);
+        setSuppliers(suppliers.filter(supplier => supplier.id !== id));
+      } catch (error) {
+        navigate('/all-supplier');
       }
-    });
+    }
   };
 
-  // const filterSearch = suppliers.filter(supplier => supplier.name.includes(searchTerm));
+  const filterSearch = suppliers.filter(supplier => {
+    const search = searchTerm.toLowerCase().replace(/\s+/g, '')
+    return (
+      supplier.name.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      supplier.email.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      supplier.phone.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      supplier.address.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      supplier.shopname.toLowerCase().replace(/\s+/g, '').includes(search) 
+    );
+  });
 
   return (
     <div>
@@ -91,7 +83,7 @@ const SupplierList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {suppliers.map(supplier => (
+                  {filterSearch.map(supplier => (
                         <tr key={supplier.id}>
                           <td>{supplier.name}</td>
                           <td>{supplier.email}</td>
@@ -100,7 +92,7 @@ const SupplierList = () => {
                           <td>{supplier.address}</td>
                           <td>
                             <Link to={{ pathname: `/edit-supplier/${supplier.id}` }} className="btn btn-sm btn-primary m-1">Edit</Link>
-                            <button onClick={() => deleteSupplier(id)} className="btn btn-sm btn-danger">
+                            <button onClick={() => deleteSupplier(supplier.id)} className="btn btn-sm btn-danger">
                               <font color="#ffffff">Delete</font>
                             </button>
                           </td>

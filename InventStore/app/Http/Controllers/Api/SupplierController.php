@@ -45,7 +45,6 @@ class SupplierController extends Controller
             'address' => 'required',
             'shopname' => 'required',   
             'phone' => 'required',   
-            'shopname' => 'required',   
         ]);
 
         $supplier = Supplier::create([
@@ -53,9 +52,7 @@ class SupplierController extends Controller
             'email' => $validated['email'],
             'address' => $validated['address'],
             'shopname' => $validated['shopname'],
-            'shopname' => $validated['shopname'],
             'phone' => $validated['phone'],
-            'photo' => $request['photo'],
         ]);
       
     }
@@ -126,13 +123,13 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $supplier = Supplier::where('id',$id)->first();
-       $photo = $supplier->photo;
-       if ($photo) {
-        unlink($photo);
+
+        if (!$supplier) {
+            return response()->json(['message' => 'suppliere not found'], 404);
+        }
         Supplier::where('id',$id)->delete();
-       }else{
-        Supplier::where('id',$id)->delete();
-       }
+
+        return response()->json(['message' => 'Supplier deleted successfully']);
     }
 }
 

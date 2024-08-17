@@ -18,36 +18,32 @@ const ProductList = () => {
       .catch(error => console.error(error));
   };
 
-  const deleteProduct = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.value) {
-        axios.delete(`/api/product/${id}`)
-          .then(() => {
-            setProducts(products.filter(product => product.id !== id));
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-          })
-          .catch(() => {
-            history.push('/product');
-          });
+  const deleteProduct = async (id) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/product/${id}`);
+        setProducts(products.filter(product => product.id !== id));
+      } catch (error) {
+        navigate('/all-product');
       }
-    });
+    }
   };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredProducts = products.filter(product =>
-    product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    const search = searchTerm.toLowerCase().replace(/\s+/g, '')
+    return (
+      product.product_name.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.product_code.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.buying_price.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.selling_price.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.buying_date.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.product_quantity.toLowerCase().replace(/\s+/g, '').includes(search)
+    );
+  });
 
   return (
     <div>
@@ -92,7 +88,7 @@ const ProductList = () => {
                 </thead>
                 <tbody>
                   {filteredProducts.map(product => (
-                    <tr key=''>
+                    <tr key={product.id}>
                       <td>{product.product_name}</td>
                       <td>{product.product_code}</td>
                       <td>{product.category_name}</td>
@@ -102,7 +98,7 @@ const ProductList = () => {
                       <td>{product.buying_date}</td>
                       <td>{product.product_quantity}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
+                        <Link to={`/edit-product/${product.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteProduct(product.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
 const AddProduct = () => {
-  
   const [form, setForm] = useState({
     product_name: '',
     product_code: '',
@@ -17,11 +16,12 @@ const AddProduct = () => {
     product_quantity: ''
   });
 
+  const {id} = useParams();
+  const navigate = useNavigate();
+
   const [errors, setErrors] = useState({});
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/v1/category')
@@ -31,7 +31,19 @@ const AddProduct = () => {
     axios.get('http://127.0.0.1:8000/api/v1/supplier')
       .then(({ data }) => setSuppliers(data))
       .catch(err => console.error(err));
-  }, []);
+
+    const fetchProduct = async () => {
+    try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/product/${id}`);
+        console.log(data);
+        setForm(data);
+    } catch (error) {
+        console.error("Error fetching product data:", error);
+    }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,9 +52,10 @@ const AddProduct = () => {
 
   const ProductInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/product', form)
+    axios.put(`http://127.0.0.1:8000/api/v1/product/${id}`, form)
       .then((response) => {
-        navigate('/all-product')
+        navigate("/all-product")
+        console.log(response.data.message)
       })
       .catch(error => setErrors(error.response.data.errors));
   };
@@ -65,7 +78,7 @@ const AddProduct = () => {
                 <div className="col-lg-12">
                   <div className="login-form">
                     <div className="text-center">
-                      <h1 className="h4 text-gray-900 mb-4">Add Product</h1>
+                      <h1 className="h4 text-gray-900 mb-4">Edit Product</h1>
                     </div>
                     <form className="user px-3" onSubmit={ProductInsert} encType="multipart/form-data">
                       <div className="form-group mb-3">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
@@ -7,6 +7,8 @@ import CIcon from '@coreui/icons-react'
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     allCategory();
@@ -16,35 +18,29 @@ const CategoryList = () => {
     try{
       const { data } = await axios.get('http://127.0.0.1:8000/api/v1/category')
       setCategories(data)
-      console.log(data)
     }
     catch (error) {
       console.error("Error fetching Categories", error);
     }
   };
 
-  const deleteCategory = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(`/api/category/${id}`)
-          .then(() => {
-            setCategories(categories.filter(category => category.id !== id));
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-          })
-          .catch(() => {
-            history.push('/all-category');
-          });
+  const deleteCategory = async (id) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/category/${id}`);
+        setCategories(categories.filter(category => category.id !== id));
+      } catch (error) {
+        navigate('/all-category');
       }
-    });
+    }
   };
+
+  const filterSearch = categories.filter(category => {
+    const search = searchTerm.toLowerCase().replace(/\s+/g, '')
+    return (
+      category.category_name.toLowerCase().replace(/\s+/g, '').includes(search)
+    );
+  });
 
   return (
     <div>
@@ -81,11 +77,11 @@ const CategoryList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map(category => (
+                  {filterSearch.map(category => (
                     <tr key={category.id}>
                       <td>{category.category_name}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
+                        <Link to={`/edit-category/${category.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteCategory(category.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>

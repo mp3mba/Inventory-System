@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Toast from 'your-toast-library'; 
 
 const AddSupplier = () => {
   const [form, setForm] = useState({
@@ -12,16 +11,16 @@ const AddSupplier = () => {
     phone: '',
     shopname: '',
     address: '',
-    photo: null,
   });
   const [errors, setErrors] = useState({});
+
+  const navigate = new useNavigate();
 
   const supplierInsert = (e) => {
     e.preventDefault();
     axios.post('http://127.0.0.1:8000/api/v1/supplier', form)
-      .then(() => {
-        console.log("supplier added successfull")
-        history.push('/all-supplier');
+      .then(response => {
+        navigate('/all-supplier');
       })
       .catch((error) => setErrors(error));
   };

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Model\Expense;
+use App\Models\Expense;
 use DB;
 
 class ExpenseController extends Controller
@@ -39,17 +39,19 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        $validateData = $request->validate([
+        $validated = $request->validate([
             'details' => 'required',
             'amount' => 'required',
-           ]);
-   
-        $expense = new Expense;
-        $expense->details = $request->details;
-        $expense->amount = $request->amount;
-        $expense->expense_date = date('d/m/y');
-        
-        $expense->save(); 
+            'expense_date' => 'required',
+        ]);
+
+        $expense = expense::create([
+            "details" => $validated["details"],
+            "amount" => $validated["amount"],
+            "expense_date" => $validated["expense_date"],
+        ]);
+
+        return response()->json(['message' => 'Expense added successful']);
     }
 
     /**
@@ -84,10 +86,25 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = array();
-        $data['details'] =  $request->details;
-        $data['amount'] =  $request->amount;
-        Expense::where('id',$id)->update($data);
+        $validated = $request->validate([
+            'details' => 'required',
+            'amount' => 'required',
+            'expense_date' => 'required',
+        ]);
+
+        $expense = Expense::find($id);
+
+        if($expense) {
+            $expense->update([
+                "details" => $validated["details"],
+                "amount" => $validated["amount"],
+                "expense_date" => $validated["expense_date"],
+            ]);
+        } else {
+            return response()->json(['message' => 'Expense not found'], 404);
+        }
+
+        return response()->json(['message' => 'Expense updated successful']);
     }
 
     /**

@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
-// import Swal from 'sweetalert2';
 
 const ExpenseList = () => {
   const [expenses, setExpenses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
 
-  useEffect(() => {
-    // Uncomment and modify if you have authentication logic
-    // if (!User.loggedIn()) {
-    //   history.push('/');
-    // }
-    fetchExpenses();
+  const navigate = useNavigate();
+
+   useEffect(() => {
+    const allExpense = () => {
+      axios.get('http://127.0.0.1:8000/api/v1/expense')
+        .then(({ data }) => setExpenses(data))
+        .catch(error => console.error(error));
+    };
+
+    allExpense();
   }, []);
 
   const fetchExpenses = () => {
@@ -24,30 +26,22 @@ const ExpenseList = () => {
       .catch(error => console.error('Error fetching expenses:', error));
   };
 
-  const deleteExpense = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(`/api/expense/${id}`)
-          .then(() => {
-            setExpenses(expenses.filter(expense => expense.id !== id));
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-          })
-          .catch(error => console.error('Error deleting expense:', error));
+  const deleteExpense = async (id) => {
+    if (window.confirm('Are you sure you want to delete this expense?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/expense/${id}`);
+        setExpenses(expenses.filter(expense => expense.id !== id));
+      } catch (error) {
+        navigate('/all-expense');
       }
-    });
+    }
   };
 
-//   const filteredExpenses = expenses.filter(expense =>
-//     expense.expense_date.includes(searchTerm)
-//   );
+  const filteredExpenses = expenses.filter(expense =>
+    expense.details.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, '')) ||
+    expense.amount.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, '')) ||
+    expense.expense_date.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, ''))
+  );
 
   return (
     <div>
@@ -86,13 +80,13 @@ const ExpenseList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {filteredExpenses.map(expense => ( */}
-                    <tr key=''>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                  {filteredExpenses.map(expense => (
+                    <tr key={expense.id}>
+                      <td>{expense.details}</td>
+                      <td>{expense.amount}</td>
+                      <td>{expense.expense_date}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary">Edit</Link>
+                        <Link to={`/edit-expense/${expense.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button
                           onClick={() => deleteExpense(expense.id)}
                           className="btn btn-sm btn-danger"
@@ -101,7 +95,7 @@ const ExpenseList = () => {
                         </button>
                       </td>
                     </tr>
-                  {/* ))} */}
+                   ))}
                 </tbody>
               </table>
             </div>

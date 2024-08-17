@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
@@ -15,6 +15,21 @@ const AddExpense = () => {
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
+  const {id} = useParams();
+
+  useEffect(() => {
+    const fetchExpense = async () => {
+      try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/expense/${id}`);
+        setForm(data);
+        // console.log(data)
+      } catch (error) {
+        console.error("Error fetching exepnse data:", error);
+      }
+    };
+
+    fetchExpense();
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,7 +37,7 @@ const AddExpense = () => {
 
   const expenseInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/expense', form)
+    axios.put(`http://127.0.0.1:8000/api/v1/expense/${id}`, form)
       .then(() => {
         navigate("/all-expense")
       })

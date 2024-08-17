@@ -31,9 +31,7 @@ const EmployeeList = () => {
       try {
         const response = await axios.delete(`http://127.0.0.1:8000/api/v1/employee/${id}`);
         setEmployees(employees.filter(employee => employee.id !== id));
-        // console.log(response.data)
       } catch (error) {
-        // console.error(error);
         navigate('/employee/all-employee');
       }
     }

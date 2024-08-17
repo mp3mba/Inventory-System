@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { cilArrowLeft } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
 
 const AddCustomer = () => {
   const [form, setForm] = useState({
@@ -12,21 +13,36 @@ const AddCustomer = () => {
   });
   const [errors, setErrors] = useState({});
 
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/customer/${id}`);
+        setForm(data);
+        console.log(data)
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    };
+
+    fetchCustomer();
+  }, [id]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const customerInsert = (e) => {
-    e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/customer', form)
-      .then((response) => {
-        navigate("/all-customers")
-          // console.log(response.data.message)
-      })
-      .catch(error => setErrors(error.response.data.errors));
-  };
+    const customerInsert = (e) => {
+        e.preventDefault();
+        axios.put(`http://127.0.0.1:8000/api/v1/customer/${id}`, form)
+        .then((response) => {
+            navigate('/all-customers')
+            console.log(response.data.message)
+        })
+        .catch(error => setErrors(error.response.data.errors));
+    };
 
   return (
     <div>

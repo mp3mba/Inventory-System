@@ -18,27 +18,15 @@ const CustomerList = () => {
       .catch(error => console.error(error));
   };
 
-  const deleteCustomer = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.value) {
-        axios.delete(`/api/customer/${id}`)
-          .then(() => {
-            setCustomers(customers.filter(customer => customer.id !== id));
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-          })
-          .catch(() => {
-            history.push('/customer');
-          });
+  const deleteCustomer = async (id) => {
+    if (window.confirm('Are you sure you want to delete this customer?')) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/customer/${id}`);
+        setCustomers(customers.filter(customer => customer.id !== id));
+      } catch (error) {
+        navigate('/employee/all-customer');
       }
-    });
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -46,7 +34,10 @@ const CustomerList = () => {
   };
 
   const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(searchTerm.toLowerCase())
+    customer.name.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, '')) ||
+    customer.email.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, '')) ||
+    customer.phone.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, '')) ||
+    customer.address.toLowerCase().replace(/\s+/g, '').includes(searchTerm.toLowerCase().replace(/\s+/g, ''))
   );
 
   return (
@@ -94,7 +85,7 @@ const CustomerList = () => {
                       <td>{customer.phone}</td>
                       <td>{customer.address}</td>
                       <td>
-                        <Link to='' className="btn btn-sm btn-primary m-1">Edit</Link>
+                        <Link to={`/edit-customers/${customer.id}`} className="btn btn-sm btn-primary m-1">Edit</Link>
                         <button onClick={() => deleteCustomer(customer.id)} className="btn btn-sm btn-danger">
                           <font color="#ffffff">Delete</font>
                         </button>
