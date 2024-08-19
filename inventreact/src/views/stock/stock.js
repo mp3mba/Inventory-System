@@ -7,28 +7,28 @@ import CIcon from '@coreui/icons-react'
 const AddProduct = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-//   const history = useHistory();
 
-//   useEffect(() => {
-//     if (!User.loggedIn()) {
-//       history.push('/');
-//     } else {
-//       allProduct();
-//     }
-//   }, []);
+  useEffect(() => {
+    allProduct();
+  }, []);
 
-  const allProduct = async () => {
-    try {
-      const { data } = await axios.get('/api/product/');
-      setProducts(data);
-    } catch (error) {
-      console.error('Error fetching products', error);
-    }
+  const allProduct = () => {
+    axios.get('http://127.0.0.1:8000/api/v1/product')
+      .then(({ data }) => setProducts(data))
+      .catch(error => console.error(error));
   };
 
-  const filterSearch = products.filter(product =>
-    product.product_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    const search = searchTerm.toLowerCase().replace(/\s+/g, '')
+    return (
+      product.product_name.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.product_code.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.buying_price.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.selling_price.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.buying_date.toLowerCase().replace(/\s+/g, '').includes(search) ||
+      product.product_quantity.toLowerCase().replace(/\s+/g, '').includes(search)
+    );
+  });
 
   return (
     <div>
@@ -62,32 +62,26 @@ const AddProduct = () => {
                   <tr>
                     <th>Name</th>
                     <th>Code</th>
-                    <th>Photo</th>
                     <th>Category</th>
                     <th>Buying Price</th>
-                    <th>Status</th>
                     <th>Quantity</th>
-                    <th>Action</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filterSearch.map(product => (
+                  {filteredProducts.map(product => (
                     <tr key={product.id}>
                       <td>{product.product_name}</td>
                       <td>{product.product_code}</td>
-                      <td><img src={product.image} alt="product" id="em_photo" /></td>
                       <td>{product.category_name}</td>
                       <td>{product.buying_price}</td>
-                      <td>
-                        {product.product_quantity >= 1 ? (
-                          <span className="badge badge-success">Available</span>
-                        ) : (
-                          <span className="badge badge-danger">Stock Out</span>
-                        )}
-                      </td>
                       <td>{product.product_quantity}</td>
                       <td>
-                        <Link to={`/edit-stock/${product.id}`} className="btn btn-sm btn-primary">Edit</Link>
+                        {product.product_quantity >= 1 ? (
+                          <span className="badge bg-success">Available</span>
+                        ) : (
+                          <span className="badge bg-danger">Stock Out</span>
+                        )}
                       </td>
                     </tr>
                   ))}
