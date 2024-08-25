@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 
 use App\Models\Product;
 use DB;
@@ -139,6 +140,16 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product updated successfull']);
     }
+
+    // public function generatePdf()
+    // {
+    //     $data = ['title' => 'Stock details'];
+    //     $pdf = PDF::loadView('pdf_template', $data);
+        
+    //     return $pdf->download('example.pdf');
+    //     // or
+    //     return $pdf->stream('example.pdf'); // to directly stream the PDF
+    // }
 
     /**
      * Remove the specified resource from storage.

@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SalaryController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\GenerateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +50,6 @@ Route::group(['prefix' => 'v1'],function(){
     Route::Get('/salary/view/{id}', [SalaryController::class, 'ViewSalary']);
     Route::Get('/edit/salary/{id}', [SalaryController::class, 'EditSalary']);
     Route::Post('/salary/update/{id}', [SalaryController::class, 'SalaryUpdate']);
-
-    Route::Post('/stock/update/{id}', [ProductController::class, 'StockUpdate']);
 
     Route::Get('/getting/product/{id}', [PosController::class, 'GetProduct']);
 
