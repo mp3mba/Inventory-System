@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import axios from "axios";
@@ -18,6 +18,8 @@ const AddEmployee = () => {
 
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;

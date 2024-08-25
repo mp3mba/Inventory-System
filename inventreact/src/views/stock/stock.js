@@ -1,21 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
+import ReactToPrint from 'react-to-print';
 
+// This component will be used for printing
+class PrintStock extends React.PureComponent {
+  render() {
+    const { products } = this.props;
+
+    return (
+      <div>
+        <div className="table-responsive">
+          <table className="table align-items-center table-flush">
+            <thead className="thead-light">
+              <tr>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Buying Price</th>
+                <th>Quantity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map(product => (
+                <tr key={product.id}>
+                  <td>{product.product_name}</td>
+                  <td>{product.product_code}</td>
+                  <td>{product.category_name}</td>
+                  <td>{product.buying_price}</td>
+                  <td>{product.product_quantity}</td>
+                  <td>
+                    {product.product_quantity >= 1 ? (
+                      <span className="badge bg-success">Available</span>
+                    ) : (
+                      <span className="badge bg-danger">Stock Out</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+}
+
+// Main component
 const AddProduct = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const componentRef = useRef(); // Ref for the component to print
 
   useEffect(() => {
     allProduct();
   }, []);
 
-  const allProduct = () => {
-    axios.get('http://127.0.0.1:8000/api/v1/product')
-      .then(({ data }) => setProducts(data))
-      .catch(error => console.error(error));
+  const allProduct = async () => {
+    try {
+      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/product');
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   const filteredProducts = products.filter(product => {
@@ -32,14 +82,14 @@ const AddProduct = () => {
 
   return (
     <div>
-        <div className="row">
-            <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
-                <Link to="/all-product" style={{  textDecoration:"none", color:'black'}}>
-                    <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
-                    Add Product
-                </Link>
-            </button>
-            </div>
+      <div className="row">
+        <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
+          <Link to="/all-product" style={{  textDecoration:"none", color:'black'}}>
+            <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
+            Go Back
+          </Link>
+        </button>
+      </div>
       <br />
       <input
         type="text"
@@ -55,6 +105,18 @@ const AddProduct = () => {
           <div className="card">
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 className="m-0 font-weight-bold text-primary">Stock</h6>
+              <ReactToPrint
+                trigger={() => (
+                  <button className="px-2 border-0 py-1 text-white rounded font-weight-bold text-primary" style={{backgroundColor: "red"}}>
+                    Print PDF
+                  </button>
+                )}
+                content={() => componentRef.current}
+              />
+            </div>
+            {/* This component is the one that will be printed */}
+            <div style={{ display: 'none' }}>
+              <PrintStock ref={componentRef} products={filteredProducts} />
             </div>
             <div className="table-responsive">
               <table className="table align-items-center table-flush">

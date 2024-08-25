@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
 import axios from 'axios';
 
 const EmployeeList = () => {

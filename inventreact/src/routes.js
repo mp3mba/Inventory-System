@@ -43,6 +43,7 @@ const POS = React.lazy(() => import('./views/pos/pos'))
 //Stock
 const Stock = React.lazy(() => import('./views/stock/stock'))
 const StockEdit = React.lazy(() => import('./views/stock/edit-stock'))
+const StockPDF = React.lazy(() => import('./views/stock/stock-pdf'))
 
 const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -70,6 +71,7 @@ const routes = [
   { path: '/point-of-sale', name: 'POS', element: POS },
   { path: '/stock', name: 'Stock', element: Stock },
   { path: '/stock-edit', name: 'StockEdit', element: StockEdit },
+  { path: '/preview-stock', name: 'StockPDF', element: StockPDF },
 ]
 
 export default routes
