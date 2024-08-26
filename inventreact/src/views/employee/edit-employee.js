@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import axios from "axios";
+import axios from '../../axiosConfig';
 
 const initialFormState = {
   name: '',
@@ -25,7 +25,7 @@ const EditEmployee = () => {
   useEffect(() => {
     const fetchEmployeeData = async () => {
       try {
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/employee/${id}`);
+        const { data } = await axios.get(`/employee/${id}`);
         setForm(data);
         setPreview(`http://127.0.0.1:8000/storage/${data.photo}`);
       } catch (error) {

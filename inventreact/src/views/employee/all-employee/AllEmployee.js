@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import axios from 'axios';
+import axios from '../../../axiosConfig';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -18,7 +18,7 @@ const EmployeeList = () => {
 
   const allEmployee = async () => {
     try {
-      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/employee');
+      const { data } = await axios.get('/employee');
       setEmployees(data);
       // console.log(data);
     } catch (error) {
@@ -29,7 +29,7 @@ const EmployeeList = () => {
   const deleteEmployee = async (id) => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/employee/${id}`);
+        const response = await axios.delete(`/employee/${id}`);
         setEmployees(employees.filter(employee => employee.id !== id));
       } catch (error) {
         navigate('/employee/all-employee');

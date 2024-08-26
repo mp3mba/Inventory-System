@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -16,7 +16,7 @@ const CategoryList = () => {
 
   const allCategory = async () => {
     try{
-      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/category')
+      const { data } = await axios.get('/category')
       setCategories(data)
     }
     catch (error) {
@@ -27,7 +27,7 @@ const CategoryList = () => {
   const deleteCategory = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/category/${id}`);
+        const response = await axios.delete(`/category/${id}`);
         setCategories(categories.filter(category => category.id !== id));
       } catch (error) {
         navigate('/all-category');

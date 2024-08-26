@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -16,7 +16,7 @@ const AddCategory = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/category/${id}`);
+        const { data } = await axios.get(`/category/${id}`);
         setForm(data);
       } catch (error) {
         console.error("Error fetching category data:", error);
@@ -32,7 +32,7 @@ const AddCategory = () => {
 
   const categoryInsert = (e) => {
     e.preventDefault();
-    axios.put(`http://127.0.0.1:8000/api/v1/category/${id}`, form)
+    axios.put(`/category/${id}`, form)
       .then(() => {
         navigate('/all-category');
         console.log("category added successful")

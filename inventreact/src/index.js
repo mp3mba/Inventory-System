@@ -5,6 +5,7 @@ import 'core-js'
 
 import App from './App'
 import store from './store'
+import './axiosConfig'
 
 // import axios from 'axios';
 

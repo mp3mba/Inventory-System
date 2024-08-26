@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactToPrint from 'react-to-print';
@@ -61,7 +61,7 @@ const AddProduct = () => {
 
   const allProduct = async () => {
     try {
-      const { data } = await axios.get('http://127.0.0.1:8000/api/v1/product');
+      const { data } = await axios.get('/product');
       setProducts(data);
     } catch (error) {
       console.error("Error fetching products:", error);

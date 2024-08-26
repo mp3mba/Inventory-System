@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -12,7 +12,7 @@ const ExpenseList = () => {
 
    useEffect(() => {
     const allExpense = () => {
-      axios.get('http://127.0.0.1:8000/api/v1/expense')
+      axios.get('/expense')
         .then(({ data }) => setExpenses(data))
         .catch(error => console.error(error));
     };
@@ -29,7 +29,7 @@ const ExpenseList = () => {
   const deleteExpense = async (id) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/expense/${id}`);
+        const response = await axios.delete(`/expense/${id}`);
         setExpenses(expenses.filter(expense => expense.id !== id));
       } catch (error) {
         navigate('/all-expense');

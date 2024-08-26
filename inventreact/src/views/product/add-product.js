@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -24,11 +24,11 @@ const AddProduct = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/v1/category')
+    axios.get('/v1/category')
       .then(({ data }) => setCategories(data))
       .catch(err => console.error(err));
 
-    axios.get('http://127.0.0.1:8000/api/v1/supplier')
+    axios.get('/supplier')
       .then(({ data }) => setSuppliers(data))
       .catch(err => console.error(err));
   }, []);
@@ -40,7 +40,7 @@ const AddProduct = () => {
 
   const ProductInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/product', form)
+    axios.post('/product', form)
       .then((response) => {
         navigate('/all-product')
       })

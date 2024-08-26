@@ -43,7 +43,12 @@ const POS = React.lazy(() => import('./views/pos/pos'))
 //Stock
 const Stock = React.lazy(() => import('./views/stock/stock'))
 const StockEdit = React.lazy(() => import('./views/stock/edit-stock'))
-const StockPDF = React.lazy(() => import('./views/stock/stock-pdf'))
+
+//Login
+const Login = React.lazy(() => import('./views/pages/login/Login'))
+
+//Registration
+const Registration = React.lazy(() => import('./views/pages/register/Register'))
 
 const routes = [
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -71,7 +76,8 @@ const routes = [
   { path: '/point-of-sale', name: 'POS', element: POS },
   { path: '/stock', name: 'Stock', element: Stock },
   { path: '/stock-edit', name: 'StockEdit', element: StockEdit },
-  { path: '/preview-stock', name: 'StockPDF', element: StockPDF },
+  { path: '/login', name: 'Login', element: Login },
+  { path: '/registration', name: 'Registration', element: Registration },
 ]
 
 export default routes

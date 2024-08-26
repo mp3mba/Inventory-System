@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -13,7 +13,7 @@ const CustomerList = () => {
   }, []);
 
   const allCustomer = () => {
-    axios.get('http://127.0.0.1:8000/api/v1/customer')
+    axios.get('/customer')
       .then(({ data }) => setCustomers(data))
       .catch(error => console.error(error));
   };
@@ -21,7 +21,7 @@ const CustomerList = () => {
   const deleteCustomer = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/customer/${id}`);
+        const response = await axios.delete(`/customer/${id}`);
         setCustomers(customers.filter(customer => customer.id !== id));
       } catch (error) {
         navigate('/employee/all-customer');

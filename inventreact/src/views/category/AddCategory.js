@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -18,7 +18,7 @@ const AddCategory = () => {
 
   const categoryInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/category', form)
+    axios.post('/category', form)
       .then(() => {
         navigate('/all-category');
       })

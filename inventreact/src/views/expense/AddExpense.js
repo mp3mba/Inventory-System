@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -22,7 +22,7 @@ const AddExpense = () => {
 
   const expenseInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/expense', form)
+    axios.post('/expense', form)
       .then(() => {
         navigate("/all-expense")
       })

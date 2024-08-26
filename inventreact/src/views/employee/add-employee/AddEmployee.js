@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import axios from "axios";
+import axios from '../../../axiosConfig';
 import { data } from "autoprefixer";
 
 const AddEmployee = () => {
@@ -43,7 +43,7 @@ const AddEmployee = () => {
     for (const key in form) {
       formData.append(key, form[key]);
     }
-    axios.post('http://127.0.0.1:8000/api/v1/employee', formData)
+    axios.post('/employee', formData)
     .then((response) => {
       navigate('/employee/all-employee');
       console.log(response.data)

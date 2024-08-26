@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';import { cilArrowLeft } from '@coreui/icons';
+import axios from '../../axiosConfig';
+import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
 const AddCustomer = () => {
@@ -20,7 +21,7 @@ const AddCustomer = () => {
 
   const customerInsert = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/v1/customer', form)
+    axios.post('/customer', form)
       .then((response) => {
         navigate("/all-customers")
           // console.log(response.data.message)

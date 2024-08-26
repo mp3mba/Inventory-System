@@ -31,23 +31,28 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $validateData = $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-            ]);
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-            if (Auth::attempt($validateData)) {
-                return response()->json(Auth::user(), 200);
-            }
-        
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return response()->json(Auth::user());
+        }
+
+        return response()->json(['error' => 'Invalid credentials'], 401);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Logged out']);
     }
 
 }

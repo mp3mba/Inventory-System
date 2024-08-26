@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
 
@@ -13,7 +13,7 @@ const ProductList = () => {
   }, []);
 
   const allProduct = () => {
-    axios.get('http://127.0.0.1:8000/api/v1/product')
+    axios.get('/product')
       .then(({ data }) => setProducts(data))
       .catch(error => console.error(error));
   };
@@ -21,7 +21,7 @@ const ProductList = () => {
   const deleteProduct = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:8000/api/v1/product/${id}`);
+        const response = await axios.delete(`/product/${id}`);
         setProducts(products.filter(product => product.id !== id));
       } catch (error) {
         navigate('/all-product');

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 
@@ -19,7 +19,7 @@ const AddCustomer = () => {
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const { data } = await axios.get(`http://127.0.0.1:8000/api/v1/customer/${id}`);
+        const { data } = await axios.get(`/customer/${id}`);
         setForm(data);
         console.log(data)
       } catch (error) {
@@ -36,7 +36,7 @@ const AddCustomer = () => {
 
     const customerInsert = (e) => {
         e.preventDefault();
-        axios.put(`http://127.0.0.1:8000/api/v1/customer/${id}`, form)
+        axios.put(`/customer/${id}`, form)
         .then((response) => {
             navigate('/all-customers')
             console.log(response.data.message)
