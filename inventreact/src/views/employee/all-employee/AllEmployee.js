@@ -39,7 +39,7 @@ const EmployeeList = () => {
 
   const checkAuth = async () => {
     try {
-      await axios.get('/api/employee');
+      await axios.get('/employee');
       setIsAuthenticated(true);
     } catch (error) {
       setIsAuthenticated(false);

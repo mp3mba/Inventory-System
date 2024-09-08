@@ -26,17 +26,13 @@ use App\Http\Controllers\GenerateController;
 |
 */
 
-Route::group(['prefix' => 'auth'], function ($router) {
-
+Route::group(['prefix' => 'v1'], function ($router) {
     Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
     Route::post('/signup', [App\Http\Controllers\AuthController::class, 'signup']);
-    Route::post('logout', [App\Http\Controllers\AuthController::class, 'logout']);
-//     Route::post('refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
-//     Route::post('me', [App\Http\Controllers\AuthController::class, 'me']);
-
 });
 
-Route::group(['prefix' => 'v1'],function(){
+Route::group(['middleware' => 'auth:sanctum' , 'prefix' => 'v1'],function(){
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::apiResource('/employee', EmployeeController::class);
     Route::apiResource('/supplier', SupplierController::class);
     Route::apiResource('/category', CategoryController::class);

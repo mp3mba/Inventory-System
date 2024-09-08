@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Hash;
 use Hash;
 // use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,21 +14,23 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-     
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|unique:users|max:255',
-            'password' => 'required|min:6'
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
 
-        $data = array();
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = Hash::make($request->password);
-        DB::table('users')->insert($data);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
 
-        return response()->json('user signed up successful');
+        Auth::login($user);
+
+        return response()->json($user);
     }
+
 
     public function login(Request $request)
     {
@@ -37,22 +40,22 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-            return response()->json(Auth::user());
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ]);
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return response()->json(['message' => 'Logged out']);
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully']);
     }
 
 }

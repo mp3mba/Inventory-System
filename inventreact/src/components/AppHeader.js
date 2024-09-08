@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import axios from '../axiosConfig';
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
@@ -24,12 +25,29 @@ const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.addEventListener('scroll', () => {
       headerRef.current &&
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
   }, [])
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/logout', {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        withCredentials: true
+      });
+      localStorage.removeItem('token');
+      navigate('/login')
+    } catch (error) {
+      console.error('Logout Failed', error)
+    }
+  };
 
   return (
     <CHeader position="sticky" className="mb-4 p-0" ref={headerRef}>
@@ -49,7 +67,7 @@ const AppHeader = () => {
         </CHeaderNav>
         <CHeaderNav className="ms-auto">
           <CNavItem>
-            <CNavLink href="#">
+            <CNavLink onClick={handleLogout}>
               <CIcon icon={cilAccountLogout} size="lg" />
             </CNavLink>
           </CNavItem>
