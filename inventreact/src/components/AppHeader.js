@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import axios from '../axiosConfig';
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -26,6 +26,13 @@ const AppHeader = () => {
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   const navigate = useNavigate();
+
+  const location = useLocation()
+
+  // Check if the current path is '/login'
+  if (location.pathname === '/login' || location.pathname === '/registration' ) {
+    return null;
+  }
 
   useEffect(() => {
     document.addEventListener('scroll', () => {
@@ -65,7 +72,7 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav className="ms-auto">
+        <CHeaderNav className="ms-auto" style={{ cursor: 'pointer' }}>
           <CNavItem>
             <CNavLink onClick={handleLogout}>
               <CIcon icon={cilAccountLogout} size="lg" />

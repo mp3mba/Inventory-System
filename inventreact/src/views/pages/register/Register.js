@@ -15,7 +15,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from '../../axiosConfig';
+import axios from '../../../axiosConfig';
 
 const Register = () => {
 
@@ -96,8 +96,8 @@ const Register = () => {
                       placeholder="Name"
                       autoComplete="name"
                       name='name'
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={register.name}
+                      onChange={(e) => setRegister(e.target.value)}
                     />
                     {errors.name && <small className="text-danger">{errors.name[0]}</small>}
                   </CInputGroup>
@@ -107,8 +107,8 @@ const Register = () => {
                       placeholder="Email"
                       autoComplete="email" 
                       name='email'
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={register.email}
+                      onChange={(e) => setRegister(e.target.value)}
                     />
                     {errors.email && <small className="text-danger">{errors.email[0]}</small>}
                   </CInputGroup>
@@ -121,8 +121,8 @@ const Register = () => {
                       placeholder="Password"
                       autoComplete="new-password"
                       name='password'
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={register.password}
+                      onChange={(e) => setRegister(e.target.value)}
                     />
                     {errors.password && <small className="text-danger">{errors.password[0]}</small>}
                   </CInputGroup>

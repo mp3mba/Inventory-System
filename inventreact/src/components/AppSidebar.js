@@ -10,6 +10,7 @@ import {
   CSidebarToggler,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { useLocation } from 'react-router-dom';
 
 import { AppSidebarNav } from './AppSidebarNav'
 
@@ -23,6 +24,12 @@ const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const location = useLocation()
+
+   // Check if the current path is '/login'
+   if (location.pathname === '/login' || location.pathname === '/registration') {
+    return null;
+  }
 
   return (
     <CSidebar
