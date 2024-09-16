@@ -1,4 +1,5 @@
 import React, {Suspense} from 'react'
+import { CSpinner } from '@coreui/react'
 import { Navigate } from 'react-router-dom'
 
 // Helper function to check if user is authenticated
@@ -10,16 +11,26 @@ const isAuthenticated = () => {
 }
 
 // Protected route component
-const ProtectedRoute = ({ element: Element, ...rest }) => {
+const ProtectedRoute = ({ component: Component, ...rest }) => {
   return isAuthenticated() ? (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Element {...rest} />
+    <Suspense fallback={
+      <div className="pt-3 text-center">
+        <CSpinner color="primary" variant="grow" />
+      </div>
+    }>
+      <Component {...rest} />
     </Suspense>
   ) : (
     <Navigate to="/login" replace />
   )
 }
 
+// Component for wildcard route redirect
+const RedirectTo404 = () => {
+  return <Navigate to="/404" replace />;
+};
+
+//Dashboard
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
 // Employee
@@ -70,50 +81,53 @@ const Login = React.lazy(() => import('./views/pages/login/Login'))
 //Registration
 const Registration = React.lazy(() => import('./views/pages/register/Register'))
 
+//Not Found
+const NotFound = React.lazy(() => import('./views/pages/page404/Page404'))
+
 const routes = [
   { path: '/dashboard', 
     name: 'Dashboard', 
-    element: (props) => <ProtectedRoute element={Dashboard} {...props} />
+    element: (props) => <ProtectedRoute component={Dashboard} {...props} />
   },
   { path: '/employee/add-employee',
     name: 'AddEmployee', 
-    element: (props) => <ProtectedRoute element={AddEmployee} {...props} /> 
+    element: (props) => <ProtectedRoute component={AddEmployee} {...props} /> 
   },
   { path: '/employee/all-employee', 
     name: 'ViewEmployee', 
-    element: (props) => <ProtectedRoute element={ViewEmployee} {...props} /> 
+    element: (props) => <ProtectedRoute component={ViewEmployee} {...props} /> 
   },
   { path: '/employee/edit-employee/:id', 
     name: 'EditEmployee', 
-    element: (props) => <ProtectedRoute element={EditEmployee} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditEmployee} {...props} /> 
   },
   { path: '/add-supplier', 
     name: 'AddSupplier', 
-    element: (props) => <ProtectedRoute element={AddSupplier} {...props} /> 
+    element: (props) => <ProtectedRoute component={AddSupplier} {...props} /> 
   },
   { path: '/all-supplier', 
     name: 'AllSupplier', 
-    element: (props) => <ProtectedRoute element={AllSupplier} {...props} /> 
+    element: (props) => <ProtectedRoute component={AllSupplier} {...props} /> 
   },
   { path: '/edit-supplier/:id', 
     name: 'EditSupplier', 
-    element: (props) => <ProtectedRoute element={EditSupplier} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditSupplier} {...props} /> 
   },
   { path: '/all-category', 
     name: 'AllCategory', 
-    element: (props) => <ProtectedRoute element={AllCategory} {...props} /> 
+    element: (props) => <ProtectedRoute component={AllCategory} {...props} /> 
   },
   { path: '/add-category', 
     name: 'AddCategory', 
-    element: (props) => <ProtectedRoute element={AllCategory} {...props} /> 
+    element: (props) => <ProtectedRoute component={AllCategory} {...props} /> 
   },
   { path: '/edit-category/:id', 
     name: 'EditCategory', 
-    element: (props) => <ProtectedRoute element={EditCategory} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditCategory} {...props} /> 
   },
   { path: '/add-product', 
     name: 'AddProduct', 
-    element: (props) => <ProtectedRoute element={AddProduct} {...props} /> 
+    element: (props) => <ProtectedRoute component={AddProduct} {...props} /> 
   },
   { path: '/all-product', 
     name: 'AllProduct', 
@@ -121,55 +135,55 @@ const routes = [
   },
   { path: '/edit-product/:id', 
     name: 'EditProduct', 
-    element: (props) => <ProtectedRoute element={EditProduct} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditProduct} {...props} /> 
   },
   { path: '/all-customers', 
     name: 'AllCustomer', 
-    element: (props) => <ProtectedRoute element={AllCustomer} {...props} />
+    element: (props) => <ProtectedRoute component={AllCustomer} {...props} />
   },
   { path: '/add-customers', 
     name: 'AddCustomer', 
-    element: (props) => <ProtectedRoute element={AddCustomer} {...props} />
+    element: (props) => <ProtectedRoute component={AddCustomer} {...props} />
   },
   { path: '/edit-customers/:id', 
     name: 'EditCustomer', 
-    element: (props) => <ProtectedRoute element={EditCustomer} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditCustomer} {...props} /> 
   },
   { path: '/add-order', 
     name: 'AddOrder', 
-    element: (props) => <ProtectedRoute element={AddOrder} {...props} />
+    element: (props) => <ProtectedRoute component={AddOrder} {...props} />
   },
   { path: '/view-order', 
     name: 'ViewOrder', 
-    element: (props) => <ProtectedRoute element={ViewOrder} {...props} /> 
+    element: (props) => <ProtectedRoute component={ViewOrder} {...props} /> 
   },
   { path: '/search-order', 
     name: 'SearchOrder', 
-    element: (props) => <ProtectedRoute element={SearchOrder} {...props} />
+    element: (props) => <ProtectedRoute component={SearchOrder} {...props} />
   },
   { path: '/add-expense', 
     name: 'AddExpense', 
-    element: (props) => <ProtectedRoute element={AddExpense} {...props} />
+    element: (props) => <ProtectedRoute component={AddExpense} {...props} />
   },
   { path: '/all-expense', 
     name: 'AllExpense', 
-    element: (props) => <ProtectedRoute element={AllExpense} {...props} /> 
+    element: (props) => <ProtectedRoute component={AllExpense} {...props} /> 
   },
   { path: '/edit-expense/:id', 
     name: 'EditExpense', 
-    element: (props) => <ProtectedRoute element={EditExpense} {...props} /> 
+    element: (props) => <ProtectedRoute component={EditExpense} {...props} /> 
   },
   { path: '/point-of-sale', 
     name: 'POS', 
-    element: (props) => <ProtectedRoute element={POS} {...props} />
+    element: (props) => <ProtectedRoute component={POS} {...props} />
   },
   { path: '/stock', 
     name: 'Stock', 
-    element: (props) => <ProtectedRoute element={Stock} {...props} /> 
+    element: (props) => <ProtectedRoute component={Stock} {...props} /> 
   },
   { path: '/stock-edit', 
     name: 'StockEdit', 
-    element: (props) => <ProtectedRoute element={StockEdit} {...props} /> 
+    element: (props) => <ProtectedRoute component={StockEdit} {...props} /> 
   },
   { path: '/login', 
     name: 'Login', 
@@ -177,7 +191,15 @@ const routes = [
   },
   { path: '/registration', 
     name: 'Registration', 
-    element: Registration 
+    element: Registration
+  },
+  { 
+    path: '/404', 
+    element: (props) => <ProtectedRoute component={NotFound} {...props} /> 
+  },
+  { 
+    path: '*', 
+    element: (props) => <ProtectedRoute component={RedirectTo404} {...props} /> 
   },
 ]
 

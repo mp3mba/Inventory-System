@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
+import { BarLoader } from 'react-spinners';
 import CIcon from '@coreui/icons-react'
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     allProduct();
@@ -14,8 +16,15 @@ const ProductList = () => {
 
   const allProduct = () => {
     axios.get('/product')
-      .then(({ data }) => setProducts(data))
-      .catch(error => console.error(error));
+      .then(({ data }) => {
+        setProducts(data)
+        setLoading(false)
+      }
+    )
+    .catch(error => {
+      setLoading(false)
+      console.error(error)
+    });
   };
 
   const deleteProduct = async (id) => {
@@ -87,7 +96,14 @@ const ProductList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProducts.map(product => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                  filteredProducts.map(product => (
                     <tr key={product.id}>
                       <td>{product.product_name}</td>
                       <td>{product.product_code}</td>
@@ -104,7 +120,8 @@ const ProductList = () => {
                         </button>
                       </td>
                     </tr>
-                  ))}
+                  )
+                ))}
                 </tbody>
               </table>
             </div>

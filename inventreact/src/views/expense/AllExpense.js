@@ -2,19 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
+import { BarLoader } from 'react-spinners';
 import CIcon from '@coreui/icons-react'
 
 const ExpenseList = () => {
   const [expenses, setExpenses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
    useEffect(() => {
     const allExpense = () => {
       axios.get('/expense')
-        .then(({ data }) => setExpenses(data))
-        .catch(error => console.error(error));
+        .then(({ data }) => {
+          setExpenses(data)
+          setLoading(false)
+        })
+        .catch(error => {
+          console.error(error)
+          setLoading(false)
+        });
     };
 
     allExpense();
@@ -80,7 +88,14 @@ const ExpenseList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredExpenses.map(expense => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                  filteredExpenses.map(expense => (
                     <tr key={expense.id}>
                       <td>{expense.details}</td>
                       <td>{expense.amount}</td>
@@ -95,7 +110,8 @@ const ExpenseList = () => {
                         </button>
                       </td>
                     </tr>
-                   ))}
+                  )
+                ))}
                 </tbody>
               </table>
             </div>

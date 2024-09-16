@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
+import { BarLoader } from 'react-spinners';
 import ReactToPrint from 'react-to-print';
 
 // This component will be used for printing
@@ -53,6 +54,7 @@ class PrintStock extends React.PureComponent {
 const AddProduct = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
   const componentRef = useRef(); // Ref for the component to print
 
   useEffect(() => {
@@ -63,8 +65,10 @@ const AddProduct = () => {
     try {
       const { data } = await axios.get('/product');
       setProducts(data);
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching products:", error);
+      setLoading(false)
     }
   };
 
@@ -131,7 +135,14 @@ const AddProduct = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProducts.map(product => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredProducts.map(product => (
                     <tr key={product.id}>
                       <td>{product.product_name}</td>
                       <td>{product.product_code}</td>
@@ -146,7 +157,8 @@ const AddProduct = () => {
                         )}
                       </td>
                     </tr>
-                  ))}
+                  )
+                ))}
                 </tbody>
               </table>
             </div>

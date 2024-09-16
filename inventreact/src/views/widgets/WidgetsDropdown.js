@@ -41,7 +41,7 @@ const WidgetsDropdown = (props) => {
     <CRow className={props.className} xs={{ gutter: 4 }}>
       <CCol sm={12} xl={12} xxl={12}>
         <CWidgetStatsA
-          color="danger"
+          color="transparent"
           value={
             <>
               44K{' '}
@@ -67,7 +67,7 @@ const WidgetsDropdown = (props) => {
           chart={
             <CChartBar
               className="mt-3 mx-3"
-              style={{ height: '60vh' }}
+              style={{ height: '50vh' }}
               data={{
                 labels: [
                   'January',
@@ -85,8 +85,8 @@ const WidgetsDropdown = (props) => {
                 ],
                 datasets: [
                   {
-                    label: 'My First dataset',
-                    backgroundColor: 'rgba(255,255,255,.2)',
+                    label: 'My Inventory Sales',
+                    backgroundColor: 'rgba(0,128,0,1)',
                     borderColor: 'rgba(255,255,255,.55)',
                     data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98],
                     barPercentage: 0.6,
@@ -102,22 +102,25 @@ const WidgetsDropdown = (props) => {
                 },
                 scales: {
                   x: {
-                    grid: {
+                    border: {
                       display: true,
-                      // drawTicks: false,
+                    },
+                    grid: {
+                      display: false,
+                      drawTicks: false,
                     },
                     ticks: {
                       display: true,
                     },
                   },
                   y: {
-                    // border: {
-                    //   display: false,
-                    // },
-                    grid: {
+                    border: {
                       display: true,
-                      // drawBorder: false,
-                      // drawTicks: false,
+                    },
+                    grid: {
+                      display: false,
+                      drawBorder: false,
+                      drawTicks: true,
                     },
                     ticks: {
                       display: true,

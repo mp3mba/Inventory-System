@@ -145,7 +145,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'View ALl Expense',
+        name: 'View All Expense',
         to: '/all-expense',
       },
     ],
@@ -156,32 +156,6 @@ const _nav = [
     to: '/stock',
     icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'POS',
-  //   to: '/point-of-sale',
-  //   icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Login',
-  //   to: '/login',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Register',
-  //   to: '/register',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Error 404',
-  //   to: '/404',
-  // },
-  // {
-  //   component: CNavItem,
-  //   name: 'Error 500',
-  //   to: '/500',
-  // },
 ]
 
 export default _nav

@@ -27,19 +27,23 @@ const AppHeader = () => {
 
   const navigate = useNavigate();
 
-  const location = useLocation()
-
-  // Check if the current path is '/login'
-  if (location.pathname === '/login' || location.pathname === '/registration' ) {
-    return null;
-  }
-
   useEffect(() => {
     document.addEventListener('scroll', () => {
       headerRef.current &&
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
     })
+
+    return () => {
+      document.removeEventListener('scroll', () => {}); // Cleanup event listener
+    };
   }, [])
+
+  const location = useLocation()
+  
+  // Check if the current path is '/login'
+  if (location.pathname === '/login' || location.pathname === '/registration' || location.pathname === '/404') {
+    return null;
+  }
 
   const handleLogout = async () => {
     try {

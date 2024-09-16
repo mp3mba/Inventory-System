@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
+import { BarLoader } from 'react-spinners';
 import CIcon from '@coreui/icons-react'
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     allCustomer();
@@ -14,8 +16,14 @@ const CustomerList = () => {
 
   const allCustomer = () => {
     axios.get('/customer')
-      .then(({ data }) => setCustomers(data))
-      .catch(error => console.error(error));
+      .then(({ data }) => {
+        setCustomers(data)
+        setLoading(false)
+      })
+      .catch(error => {
+        console.error(error)
+        setLoading(false)
+      });
   };
 
   const deleteCustomer = async (id) => {
@@ -78,7 +86,14 @@ const CustomerList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredCustomers.map(customer => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                  filteredCustomers.map(customer => (
                     <tr key={customer.id}>
                       <td>{customer.name}</td>
                       <td>{customer.email}</td>
@@ -91,7 +106,8 @@ const CustomerList = () => {
                         </button>
                       </td>
                     </tr>
-                   ))}
+                  )
+                ))}
                 </tbody>
               </table>
             </div>

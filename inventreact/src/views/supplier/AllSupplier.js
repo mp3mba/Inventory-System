@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { cilArrowLeft } from '@coreui/icons';
+import { BarLoader } from 'react-spinners';
 import CIcon from '@coreui/icons-react'
 
 const SupplierList = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     allSupplier();
@@ -16,9 +18,11 @@ const SupplierList = () => {
     try{
       const { data } = await axios.get('http://127.0.0.1:8000/api/v1/supplier')
       setSuppliers(data)
+      setLoading(false)
     }
     catch (error) {
       console.error("Error fetching suppliers:", error);
+      setLoading(false)
     }
   };
 
@@ -83,7 +87,14 @@ const SupplierList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filterSearch.map(supplier => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                  filterSearch.map(supplier => (
                         <tr key={supplier.id}>
                           <td>{supplier.name}</td>
                           <td>{supplier.email}</td>
@@ -98,7 +109,7 @@ const SupplierList = () => {
                           </td>
                         </tr>
                       )
-                    )}
+                    ))}
                 </tbody>
               </table>
             </div>

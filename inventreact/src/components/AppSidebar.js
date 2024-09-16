@@ -27,7 +27,7 @@ const AppSidebar = () => {
   const location = useLocation()
 
    // Check if the current path is '/login'
-   if (location.pathname === '/login' || location.pathname === '/registration') {
+   if (location.pathname === '/login' || location.pathname === '/registration' || location.pathname === '/404') {
     return null;
   }
 

@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
+import { BarLoader } from 'react-spinners';
 import axios from '../../../axiosConfig';
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth();
     allEmployee();
   }, []);
 
@@ -20,9 +20,11 @@ const EmployeeList = () => {
     try {
       const { data } = await axios.get('/employee');
       setEmployees(data);
+      setLoading(false);
       // console.log(data);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
@@ -34,15 +36,6 @@ const EmployeeList = () => {
       } catch (error) {
         navigate('/employee/all-employee');
       }
-    }
-  };
-
-  const checkAuth = async () => {
-    try {
-      await axios.get('/employee');
-      setIsAuthenticated(true);
-    } catch (error) {
-      setIsAuthenticated(false);
     }
   };
 
@@ -96,7 +89,14 @@ const EmployeeList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filterSearch.map(employee => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                    filterSearch.map(employee => (
                     <tr key={employee.id}>
                       <td>{employee.name}</td>
                       <td>{employee.email}</td>
@@ -109,6 +109,7 @@ const EmployeeList = () => {
                         <button onClick={() => deleteEmployee(employee.id)} className="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></button>
                       </td>
                     </tr>
+                  )
                   ))}
                 </tbody>
               </table>

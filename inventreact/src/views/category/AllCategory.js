@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
+import { BarLoader } from 'react-spinners';
 import CIcon from '@coreui/icons-react'
 
 const CategoryList = () => {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -18,9 +20,11 @@ const CategoryList = () => {
     try{
       const { data } = await axios.get('/category')
       setCategories(data)
+      setLoading(false)
     }
     catch (error) {
       console.error("Error fetching Categories", error);
+      setLoading(false)
     }
   };
 
@@ -77,7 +81,14 @@ const CategoryList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filterSearch.map(category => (
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
+                        <BarLoader color="#0000FF" width="850" />
+                      </td>
+                    </tr>
+                  ) : (
+                  filterSearch.map(category => (
                     <tr key={category.id}>
                       <td>{category.category_name}</td>
                       <td>
@@ -87,7 +98,8 @@ const CategoryList = () => {
                         </button>
                       </td>
                     </tr>
-                  ))}
+                  )
+                ))}
                 </tbody>
               </table>
             </div>
