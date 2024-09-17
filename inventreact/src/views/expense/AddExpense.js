@@ -2,15 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddExpense = () => {
 
   const [form, setForm] = useState({ 
     details: '',
-    expense_date: '', 
+    expense_date: new Date(), 
     amount: '' 
   });
+
+  const handleDateChange = (date) => {
+    setForm({ ...form, expense_date: date });
+  };
 
   const [errors, setErrors] = useState({});
 
@@ -86,13 +92,13 @@ const AddExpense = () => {
 
                           <div className="col-md-3"><br />
                             <label htmlFor="expenseAmount"><b>Expense Date</b></label>
-                            <input
-                              type="date"
+                            <DatePicker
+                              selected={form.expense_date}
+                              onChange={handleDateChange}
+                              dateFormat="yyyy-MM-dd"
                               className="form-control"
                               id="expense_date"
                               name="expense_date"
-                              value={form.expense_date}
-                              onChange={handleChange}
                             />
                             {errors.expense_date && <small className="text-danger">{errors.expense_date[0]}</small>}
                           </div>

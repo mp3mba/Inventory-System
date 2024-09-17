@@ -72,7 +72,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'View ALl Categories',
+        name: 'View All Categories',
         to: '/all-category',
       },
     ],
