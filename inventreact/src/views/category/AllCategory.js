@@ -50,7 +50,7 @@ const CategoryList = () => {
     <div>
        <div className="row">
             <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "185px", color:"#000"}}>
-                <Link to="/add-category" style={{  textDecoration:"none", color:'black'}}>
+                <Link to="/add-product" style={{  textDecoration:"none", color:'black'}}>
                     <CIcon icon={cilArrowLeft} customClassName="nav-icon" style={{ width: "50px", height:"20px" }} />
                     Add Categories
                 </Link>

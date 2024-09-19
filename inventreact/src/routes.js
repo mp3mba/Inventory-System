@@ -119,7 +119,7 @@ const routes = [
   },
   { path: '/add-category', 
     name: 'AddCategory', 
-    element: (props) => <ProtectedRoute component={AllCategory} {...props} /> 
+    element: (props) => <ProtectedRoute component={AddCategory} {...props} /> 
   },
   { path: '/edit-category/:id', 
     name: 'EditCategory', 
