@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react'
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddProduct = () => {
   
@@ -13,9 +15,13 @@ const AddProduct = () => {
     supplier_id: '',
     buying_price: '',
     selling_price: '',
-    buying_date: '',
+    buying_date: new Date(),
     product_quantity: ''
   });
+
+  const handleDateChange = (date) => {
+    setForm({ ...form, expense_date: date });
+  };
 
   const [errors, setErrors] = useState({});
   const [categories, setCategories] = useState([]);
@@ -168,13 +174,13 @@ const AddProduct = () => {
                         <div className="row">
                           <div className="col-md-6">
                             <label htmlFor="buyingDate">Buying Date</label>
-                            <input
-                              type="date"
+                             <DatePicker
+                              selected={form.buying_date}
+                              onChange={handleDateChange}
+                              dateFormat="yyyy-MM-dd"
                               className="form-control"
-                              id="buyingDate"
+                              id="buying_date"
                               name="buying_date"
-                              value={form.buying_date}
-                              onChange={handleChange}
                             />
                             {errors.buying_date && <small className="text-danger">{errors.buying_date[0]}</small>}
                           </div>
