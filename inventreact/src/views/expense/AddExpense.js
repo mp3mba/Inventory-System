@@ -10,12 +10,20 @@ const AddExpense = () => {
 
   const [form, setForm] = useState({ 
     details: '',
-    expense_date: new Date(), 
+    expense_date: new Date().toISOString().split('T')[0], 
     amount: '' 
   });
 
+  const formatDate = (date) => {
+    return date ? date.toISOString().split('T')[0] : '';
+  };
+
   const handleDateChange = (date) => {
-    setForm({ ...form, expense_date: date });
+    const formattedDate = formatDate(date);
+    setForm((prevForm) => ({
+      ...prevForm,
+      expense_date: formattedDate
+    }));
   };
 
   const [errors, setErrors] = useState({});
@@ -93,7 +101,7 @@ const AddExpense = () => {
                           <div className="col-md-3"><br />
                             <label htmlFor="expenseAmount"><b>Expense Date</b></label>
                             <DatePicker
-                              selected={form.expense_date}
+                               selected={form.expense_date ? new Date(form.expense_date) : null}
                               onChange={handleDateChange}
                               dateFormat="yyyy-MM-dd"
                               className="form-control"

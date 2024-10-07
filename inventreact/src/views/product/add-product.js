@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
-import CIcon from '@coreui/icons-react'
+import CIcon from '@coreui/icons-react';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
 
 const AddProduct = () => {
   
@@ -15,12 +16,20 @@ const AddProduct = () => {
     supplier_id: '',
     buying_price: '',
     selling_price: '',
-    buying_date: new Date(),
+    buying_date: new Date().toISOString().split('T')[0],
     product_quantity: ''
   });
 
+  const formatDate = (date) => {
+    return date ? date.toISOString().split('T')[0] : '';
+  };
+
   const handleDateChange = (date) => {
-    setForm({ ...form, expense_date: date });
+    const formattedDate = formatDate(date);
+    setForm((prevForm) => ({
+      ...prevForm,
+      buying_date: formattedDate
+    }));
   };
 
   const [errors, setErrors] = useState({});
@@ -30,7 +39,7 @@ const AddProduct = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/v1/category')
+    axios.get('/category')
       .then(({ data }) => setCategories(data))
       .catch(err => console.error(err));
 
@@ -46,6 +55,7 @@ const AddProduct = () => {
 
   const ProductInsert = (e) => {
     e.preventDefault();
+    console.log(handleDateChange)
     axios.post('/product', form)
       .then((response) => {
         navigate('/all-product')
@@ -174,10 +184,10 @@ const AddProduct = () => {
                         <div className="row">
                           <div className="col-md-6">
                             <label htmlFor="buyingDate">Buying Date</label>
-                             <DatePicker
-                              selected={form.buying_date}
+                            <DatePicker
+                              selected={form.buying_date ? new Date(form.buying_date) : null}
                               onChange={handleDateChange}
-                              dateFormat="yyyy-MM-dd"
+                              dateFormat="yy-MM-dd"
                               className="form-control"
                               id="buying_date"
                               name="buying_date"
