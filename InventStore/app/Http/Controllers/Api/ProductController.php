@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
-
 use App\Models\Product;
+use App\Models\Unit_of_measure;
+use App\Models\Stock_location;
 use DB;
-use Image;
 
 class ProductController extends Controller
 {
@@ -55,7 +54,9 @@ class ProductController extends Controller
             'selling_price' => 'required|numeric',
             'buying_date' => 'required',
             'product_quantity' => 'required|numeric',
-   
+            'reorder_level' => 'required',
+            'unit_of_measure' => 'required',
+            'stock_location' => 'required',
            ]);
 
            $product = Product::create([
@@ -67,6 +68,9 @@ class ProductController extends Controller
                 'selling_price' => $validated['selling_price'],
                 'buying_date' => $validated['buying_date'],
                 'product_quantity' => $validated['product_quantity'],
+                'reorder_level' => $validated['reorder_level'],
+                'unit_of_measure' => $validated['unit_of_measure'],
+                'stock_location' => $validated['stock_location'],
            ]);
            
            return response()->json(['message' => 'Product created successfull', 'product' => $product]);
@@ -141,15 +145,45 @@ class ProductController extends Controller
         return response()->json(['message' => 'Product updated successfull']);
     }
 
-    // public function generatePdf()
-    // {
-    //     $data = ['title' => 'Stock details'];
-    //     $pdf = PDF::loadView('pdf_template', $data);
-        
-    //     return $pdf->download('example.pdf');
-    //     // or
-    //     return $pdf->stream('example.pdf'); // to directly stream the PDF
-    // }
+    public function getStockLocation()
+    {
+        $stockLocation = Stock_location::all();
+
+        return response()->json($stockLocation);
+    }
+
+    public function getUnitOfMeasure()
+    {
+        $unitOfMeasure = unit_of_measure::all();
+
+        return response()->json($unitOfMeasure);
+    }
+
+    public function InsertUnitOfMeasure(Request $request)
+    {
+       $validateData = $request->validate([
+        'unit_of_measure' => 'required'
+       ]);
+
+       $unitOfMeasure = Unit_of_measure::create([
+        'unit_of_measure' => $validateData['unit_of_measure']
+       ]);
+
+       return response()->json(['message' => 'unit of measure created successfull']);
+    }
+
+    public function InsertStockLocation(Request $request)
+    {
+       $validateData = $request->validate([
+        'stock_location' => 'required'
+       ]);
+
+       $unitOfMeasure = Stock_location::create([
+        'stock_location' => $validateData['stock_location']
+       ]);
+
+       return response()->json(['message' => 'stock location created successfull']);
+    }
 
     /**
      * Remove the specified resource from storage.

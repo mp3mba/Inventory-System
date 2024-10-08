@@ -17,7 +17,10 @@ const AddProduct = () => {
     buying_price: '',
     selling_price: '',
     buying_date: new Date().toISOString().split('T')[0],
-    product_quantity: ''
+    product_quantity: '',
+    reorder_level: '',
+    unit_of_measure: '',
+    stock_location: '',
   });
 
   const formatDate = (date) => {
@@ -182,7 +185,7 @@ const AddProduct = () => {
                       </div>
                       <div className="form-group mb-3 ">
                         <div className="row">
-                          <div className="col-md-6">
+                          <div className="col-md-6 d-flex flex-column">
                             <label htmlFor="buyingDate">Buying Date</label>
                             <DatePicker
                               selected={form.buying_date ? new Date(form.buying_date) : null}
@@ -193,6 +196,36 @@ const AddProduct = () => {
                               name="buying_date"
                             />
                             {errors.buying_date && <small className="text-danger">{errors.buying_date[0]}</small>}
+                          </div>
+                          <div className="col-md-6">
+                            <label htmlFor="productQuantity">Unit Of Measure</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="unitofMeasure"
+                              placeholder="unit of measure"
+                              name="unit_of_measure"
+                              value={form.unit_of_measure}
+                              onChange={handleChange}
+                            />
+                            {errors.unit_of_measure && <small className="text-danger">{errors.unit_of_measure[0]}</small>}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group mb-3 ">
+                        <div className="row">
+                          <div className="col-md-6 d-flex flex-column">
+                            <label htmlFor="buyingDate">Reorder Level</label>
+                            <input
+                              type="number"
+                              className="form-control"
+                              id="reorderLevel"
+                              placeholder="Enter Reorder Level"
+                              name="reorder_level"
+                              value={form.reorder_level}
+                              onChange={handleChange}
+                            />
+                            {errors.reorder_level && <small className="text-danger">{errors.reorder_level[0]}</small>}
                           </div>
                           <div className="col-md-6">
                             <label htmlFor="productQuantity">Product Quantity</label>
@@ -206,6 +239,21 @@ const AddProduct = () => {
                               onChange={handleChange}
                             />
                             {errors.product_quantity && <small className="text-danger">{errors.product_quantity[0]}</small>}
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-md-6 d-flex flex-column">
+                            <label htmlFor="buyingDate">Stock Location</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="stockLocation"
+                              placeholder="stock location"
+                              name="stock_location"
+                              value={form.stock_location}
+                              onChange={handleChange}
+                            />
+                            {errors.stock_location && <small className="text-danger">{errors.stock_location[0]}</small>}
                           </div>
                         </div>
                       </div>

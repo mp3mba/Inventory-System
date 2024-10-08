@@ -18,4 +18,12 @@ class Product extends Model
     public function supplier(){
         return $this->belongsTo(Supplier::class);
     }
+
+    public function unit_of_measure(){
+        return $this->hasMany(Unit_of_measure::class);
+    }
+
+    public function stock_location(){
+        return $this->hasMany(Stock_location::class);
+    }
 }

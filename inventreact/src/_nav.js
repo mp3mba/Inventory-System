@@ -89,7 +89,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'View ALl Product',
+        name: 'View All Product',
         to: '/all-product',
       },
     ],
@@ -106,7 +106,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'View ALl Customer',
+        name: 'View All Customer',
         to: '/all-customers',
       },
     ],

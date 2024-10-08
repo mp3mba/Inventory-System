@@ -25,6 +25,10 @@ return new class extends Migration
             $table->string('buying_date')->nullable();
             $table->string('image')->nullable();
             $table->string('product_quantity');
+            $table->unsignedBigInteger('stock_location_id')->nullable()->after('unit_of_measure_id');
+            $table->unsignedBigInteger('unit_of_measure_id')->nullable()->after('product_quantity');
+            $table->foreign('unit_of_measure_id')->references('id')->on('unit_of_measures')->onCascade('delete');
+            $table->foreign('stock_location_id')->references('id')->on('stock_locations')->onCascade('delete');
             $table->timestamps();
         });
     }

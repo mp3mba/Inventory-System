@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../../axiosConfig';
 import { cilArrowLeft } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { BarLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import ReactToPrint from 'react-to-print';
 
 // This component will be used for printing
@@ -137,8 +137,9 @@ const AddProduct = () => {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center'}}>
-                        <BarLoader color="#0000FF" width="850" />
+                      <td colSpan="7" style={{ padding: '20px', display: 'flex', justifyContent: 'center', alignItems:"center"}}>
+                      <BeatLoader margin={10} color="#0000FF" />
+                        {/* <BarLoader color="#0000FF" width={750} /> */}
                       </td>
                     </tr>
                   ) : (
@@ -162,7 +163,6 @@ const AddProduct = () => {
                 </tbody>
               </table>
             </div>
-            {/* <div className="card-footer"></div> */}
           </div>
         </div>
       </div>
