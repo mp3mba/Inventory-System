@@ -23,6 +23,8 @@ const AddProduct = () => {
     stock_location: '',
   });
 
+  const [showLocationForm, setShowLocationForm] = useState(false);
+
   const formatDate = (date) => {
     return date ? date.toISOString().split('T')[0] : '';
   };
@@ -33,6 +35,17 @@ const AddProduct = () => {
       ...prevForm,
       buying_date: formattedDate
     }));
+  };
+
+  const toggleLocationForm = () => {
+    setShowLocationForm(!showLocationForm);
+  };
+
+  const handleNewLocationSubmit = (e) => {
+    e.preventDefault();
+    // Handle submission of the new location form
+    // Add your logic here (e.g., send data to the server)
+    setShowLocationForm(false); // Hide the form after submission
   };
 
   const [errors, setErrors] = useState({});
@@ -244,18 +257,51 @@ const AddProduct = () => {
                         <div className="row">
                           <div className="col-md-6 d-flex flex-column">
                             <label htmlFor="buyingDate">Stock Location</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              id="stockLocation"
-                              placeholder="stock location"
-                              name="stock_location"
-                              value={form.stock_location}
-                              onChange={handleChange}
-                            />
-                            {errors.stock_location && <small className="text-danger">{errors.stock_location[0]}</small>}
+                            <div className="d-flex justify-content-between">
+                              <div>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="stockLocation"
+                                  placeholder="stock location"
+                                  name="stock_location"
+                                  value={form.stock_location}
+                                  onChange={handleChange}
+                                />
+                                {errors.stock_location && <small className="text-danger">{errors.stock_location[0]}</small>}
+                              </div>
+                              <div className="ml-2">
+                                <button 
+                                  type="button"
+                                  className="btn btn-primary btn-block text-nowrap"
+                                  onClick={toggleLocationForm}
+                                >
+                                  Add New
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
+
+                        {/* Conditionally Render the New Location Form */}
+                      {showLocationForm && (
+                        <form onSubmit={handleNewLocationSubmit}>
+                          <div>
+                            <div className="form-group mb-3">
+                              <label htmlFor="newLocation">New Location Name</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                id="newLocation"
+                                placeholder="Enter New Location Name"
+                                name="new_location"
+                              />
+                            </div>
+                            <button type="submit" className="btn btn-success">Save Location</button>
+                          </div>
+                        </form>
+                      )}
+
                       </div>
                       <div className="form-group mb-3 ">
                         <button type="submit" className="btn btn-primary btn-block">Save</button>
