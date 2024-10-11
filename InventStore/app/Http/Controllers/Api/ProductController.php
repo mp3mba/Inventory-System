@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Unit_of_measure;
-use App\Models\Stock_location;
 use DB;
 
 class ProductController extends Controller
@@ -143,13 +142,6 @@ class ProductController extends Controller
         }
 
         return response()->json(['message' => 'Product updated successfull']);
-    }
-
-    public function getStockLocation()
-    {
-        $stockLocation = Stock_location::all();
-
-        return response()->json($stockLocation);
     }
 
     public function getUnitOfMeasure()
