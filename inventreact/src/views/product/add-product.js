@@ -20,12 +20,16 @@ const AddProduct = () => {
     buying_date: new Date().toISOString().split('T')[0],
     product_quantity: '',
     reorder_level: '',
-    stock_location: '',
+    stock_location_id: '',
     unit_of_measure: '',
   });
 
   const [newLocation, setNewLocation] = useState({
     stock_location: ""
+  })
+
+  const [newUom, setNewUom] = useState({
+    unit_of_measure: ""
   })
 
   const [showLocationForm, setShowLocationForm] = useState(false);
@@ -46,11 +50,15 @@ const AddProduct = () => {
     setShowLocationForm(!showLocationForm);
   };
 
-  
+  const toggleUomForm = () => {
+    setShowLocationForm(!showLocationForm);
+  };
+
   const [errors, setErrors] = useState({});
   const [categories, setCategories] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [stock_locations, setStock_locations] = useState([]);
+  const [uom, setUom] = useState([]);
   
   const navigate = useNavigate();
   
@@ -66,6 +74,10 @@ const AddProduct = () => {
     axios.get('/stock_location')
     .then(({ data }) => setStock_locations(data))
     .catch(err => console.error(err));
+    
+    axios.get('/unit_of_measure')
+    .then(({ data }) => setUom(data))
+    .catch(err => console.error(err));
   }, []);
   
   const handleChange = (e) => {
@@ -76,6 +88,11 @@ const AddProduct = () => {
   const handleLocationChange = (e) => {
     const { name, value } = e.target;
     setNewLocation({ ...newLocation, [name]: value });
+  };
+  
+  const handleUomChange = (e) => {
+    const { name, value } = e.target;
+    setNewUom({ ...newUom, [name]: value });
   };
   
   const ProductInsert = (e) => {
@@ -92,6 +109,21 @@ const AddProduct = () => {
     e.preventDefault();
     try {
       await axios.post('/stock_location', newLocation);    
+      // Hide the form after successful submission
+      setShowLocationForm(false);
+    } catch (error) {
+      if (error.response && error.response.data.errors) {
+        setErrors(error.response.data.errors);
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
+  };
+  
+  const handleNewUomSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/unit_of_measure', newUom);    
       // Hide the form after successful submission
       setShowLocationForm(false);
     } catch (error) {
@@ -235,18 +267,30 @@ const AddProduct = () => {
                               />
                               {errors.buying_date && <small className="text-danger">{errors.buying_date[0]}</small>}
                             </div>
-                            <div className="col-md-6">
-                              <label htmlFor="productQuantity">Unit Of Measure</label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="unitofMeasure"
-                                placeholder="unit of measure"
-                                name="unit_of_measure"
-                                value={form.unit_of_measure}
-                                onChange={handleChange}
-                              />
-                              {errors.unit_of_measure && <small className="text-danger">{errors.unit_of_measure[0]}</small>}
+                            <div className="col-md-6 d-flex justify-content-between">
+                              <div className='w-75'>
+                                {/* <label htmlFor="buyingDate">Stock Location</label> */}
+                                <select
+                                  className="form-control"
+                                  id="unit_of_measurement"
+                                  name="unit_of_measurement"
+                                  value={form.unit_of_measurement}
+                                  onChange={handleChange}
+                                >
+                                  <option>
+                                    select unit of measurement
+                                  </option>
+                                  {uom.map(unit => (
+                                    <option key={unit.id} value={unit.id}>{unit.name}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className=''>
+                                <button type='button' className='btn btn-primary' onClick={toggleUomForm}>
+                                  Add new
+                                </button>
+                              </div>
+                              {errors.unit_of_measurement && <small className="text-danger">{errors.unit_of_measurement[0]}</small>}
                             </div>
                           </div>
                         </div>
@@ -279,23 +323,30 @@ const AddProduct = () => {
                               {errors.product_quantity && <small className="text-danger">{errors.product_quantity[0]}</small>}
                             </div>
                           </div>
-                          <div className="row">
-                            <div className="col-md-6 d-flex flex-column">
-                              <label htmlFor="buyingDate">Stock Location</label>
-                              <select
-                                className="form-control"
-                                id="stock_location"
-                                name="location_id"
-                                value={form.stock_location}
-                                onChange={handleChange}
-                              >
-                                <option value="">
-                                  select stock location
-                                </option>
-                                {stock_locations.map(location => (
-                                  <option key={location.id} value={location.id}>{location.location_name}</option>
-                                ))}
-                              </select>
+                          <div className="row mt-3">
+                            <div className="col-md-6 d-flex justify-content-between">
+                              <div className='w-75'>
+                                {/* <label htmlFor="buyingDate">Stock Location</label> */}
+                                <select
+                                  className="form-control"
+                                  id="stock_location"
+                                  name="stock_location_id"
+                                  value={form.stock_location_id}
+                                  onChange={handleChange}
+                                >
+                                  <option>
+                                    select stock location
+                                  </option>
+                                  {stock_locations.map(location => (
+                                    <option key={location.id} value={location.id}>{location.location_name}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className=''>
+                                <button type='button' className='btn btn-primary' onClick={toggleLocationForm}>
+                                  Add new
+                                </button>
+                              </div>
                               {errors.stock_location && <small className="text-danger">{errors.stock_location[0]}</small>}
                             </div>
                           </div>
@@ -315,7 +366,36 @@ const AddProduct = () => {
         </div>
       </div>
       
-       {/* Conditionally Render the New Location Form */}
+       {/* Conditionally Render the New Uom Form */}
+       {showLocationForm && (
+          <div className="d-flex justify-content-center w-100 full-page-form">
+            <div className="form-container">
+              <form onSubmit={handleNewUomSubmit} className="w-100">
+                <div>
+                  <div className="form-group mb-3">
+                    <label htmlFor="newUom">Add Unit Of Measure</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="newUom"
+                      placeholder="New Unit Of Measure"
+                      name="unit_of_measurement"
+                      value={newLocation.unit_of_measure}
+                      onChange={handleLocationChange}
+                    />
+                    {errors.unit_of_measurement && <small className="text-danger">{errors.unit_of_measurement[0]}</small>}
+                  </div>
+                  <div className="d-flex justify-content-between">
+                    <button type="button" className="btn pr-3" onClick={toggleLocationForm}>Cancel</button>
+                    <button type="submit" className="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      
+       {/* Conditionally Render the New Locatiom Form */}
        {showLocationForm && (
           <div className="d-flex justify-content-center w-100 full-page-form">
             <div className="form-container">

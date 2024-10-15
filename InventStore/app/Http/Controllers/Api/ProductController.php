@@ -55,7 +55,7 @@ class ProductController extends Controller
             'product_quantity' => 'required|numeric',
             'reorder_level' => 'required',
             'unit_of_measure' => 'required',
-            'stock_location' => 'required',
+            'stock_location_id' => 'required',
            ]);
 
            $product = Product::create([
@@ -68,8 +68,8 @@ class ProductController extends Controller
                 'buying_date' => $validated['buying_date'],
                 'product_quantity' => $validated['product_quantity'],
                 'reorder_level' => $validated['reorder_level'],
-                'unit_of_measure' => $validated['unit_of_measure'],
-                'stock_location' => $validated['stock_location'],
+                'unit_of_measure_id' => $validated['unit_of_measure'],
+                'stock_location_id' => $validated['stock_location'],
            ]);
            
            return response()->json(['message' => 'Product created successfull', 'product' => $product]);
@@ -162,19 +162,6 @@ class ProductController extends Controller
        ]);
 
        return response()->json(['message' => 'unit of measure created successfull']);
-    }
-
-    public function InsertStockLocation(Request $request)
-    {
-       $validateData = $request->validate([
-        'stock_location' => 'required'
-       ]);
-
-       $unitOfMeasure = Stock_location::create([
-        'stock_location' => $validateData['stock_location']
-       ]);
-
-       return response()->json(['message' => 'stock location created successfull']);
     }
 
     /**

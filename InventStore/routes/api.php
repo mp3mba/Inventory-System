@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\SalaryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\UnitOfMeasurementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::group(['middleware' => 'auth:sanctum' , 'prefix' => 'v1'],function(){
     Route::apiResource('/customer', CustomerController::class);
 
     Route::apiResource('/stock_location', LocationController::class);
+    Route::apiResource('/unit_of_measurement', UnitOfMeasurementController::class);
+
 
     Route::Post('/salary/paid/{id}', [SalaryController::class,'Paid']);
     Route::Get('/salary', [SalaryController::class, 'AllSalary']);
