@@ -42,7 +42,7 @@ class LocationController extends Controller
             'stock_location' => 'required'
         ]);
     
-        $unitOfMeasure = Stock_location::create([
+        $stockLocation = Stock_location::create([
         'location_name' => $validateData['stock_location']
         ]);
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Unit_of_measure;
+use DB;
 
 class UnitOfMeasurementController extends Controller
 {
@@ -13,7 +15,9 @@ class UnitOfMeasurementController extends Controller
      */
     public function index()
     {
-        //
+        $uom = Unit_of_measure::all();
+
+        return response()->json($uom);
     }
 
     /**
@@ -34,7 +38,15 @@ class UnitOfMeasurementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'unit_of_measure' => 'required'
+        ]);
+    
+        $unitOfMeasure = Unit_of_measure::create([
+        'unit_of_measure' => $validateData['unit_of_measure']
+        ]);
+
+        return response()->json(['message' => 'unit of measure created successfull']);
     }
 
     /**

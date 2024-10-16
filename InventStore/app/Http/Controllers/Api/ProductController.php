@@ -54,7 +54,7 @@ class ProductController extends Controller
             'buying_date' => 'required',
             'product_quantity' => 'required|numeric',
             'reorder_level' => 'required',
-            'unit_of_measure' => 'required',
+            'unit_of_measurement' => 'required',
             'stock_location_id' => 'required',
            ]);
 
@@ -68,8 +68,8 @@ class ProductController extends Controller
                 'buying_date' => $validated['buying_date'],
                 'product_quantity' => $validated['product_quantity'],
                 'reorder_level' => $validated['reorder_level'],
-                'unit_of_measure_id' => $validated['unit_of_measure'],
-                'stock_location_id' => $validated['stock_location'],
+                'unit_of_measure_id' => $validated['unit_of_measurement'],
+                'stock_location_id' => $validated['stock_location_id'],
            ]);
            
            return response()->json(['message' => 'Product created successfull', 'product' => $product]);

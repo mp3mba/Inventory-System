@@ -21,7 +21,7 @@ const AddProduct = () => {
     product_quantity: '',
     reorder_level: '',
     stock_location_id: '',
-    unit_of_measure: '',
+    unit_of_measurement: '',
   });
 
   const [newLocation, setNewLocation] = useState({
@@ -33,6 +33,7 @@ const AddProduct = () => {
   })
 
   const [showLocationForm, setShowLocationForm] = useState(false);
+  const [showUomForm, setShowUomForm] = useState(false);
 
   const formatDate = (date) => {
     return date ? date.toISOString().split('T')[0] : '';
@@ -48,10 +49,12 @@ const AddProduct = () => {
 
   const toggleLocationForm = () => {
     setShowLocationForm(!showLocationForm);
+    setShowUomForm(false);
   };
 
   const toggleUomForm = () => {
-    setShowLocationForm(!showLocationForm);
+    setShowUomForm(!showUomForm);
+    setShowLocationForm(false);
   };
 
   const [errors, setErrors] = useState({});
@@ -75,7 +78,7 @@ const AddProduct = () => {
     .then(({ data }) => setStock_locations(data))
     .catch(err => console.error(err));
     
-    axios.get('/unit_of_measure')
+    axios.get('/unit_of_measurement')
     .then(({ data }) => setUom(data))
     .catch(err => console.error(err));
   }, []);
@@ -123,9 +126,9 @@ const AddProduct = () => {
   const handleNewUomSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/unit_of_measure', newUom);    
+      await axios.post('/unit_of_measurement', newUom);    
       // Hide the form after successful submission
-      setShowLocationForm(false);
+      setShowUomForm(false);
     } catch (error) {
       if (error.response && error.response.data.errors) {
         setErrors(error.response.data.errors);
@@ -137,7 +140,7 @@ const AddProduct = () => {
 
   return (
     <div>
-      <div className={`main-content ${showLocationForm ? 'blur' : ''}`}>
+      <div className={`main-content ${showUomForm || showLocationForm ? 'blur' : ''}`}>
         <div className="row">
             <button className='btn btn-light' style={{ backgroundColor: '#ebc281', width: "180px", color:"#000"}}>
               <Link to="/all-product" style={{  textDecoration:"none", color:'black'}}>
@@ -269,7 +272,7 @@ const AddProduct = () => {
                             </div>
                             <div className="col-md-6 d-flex justify-content-between">
                               <div className='w-75'>
-                                {/* <label htmlFor="buyingDate">Stock Location</label> */}
+                                {/* <label htmlFor="buyingDate">Unit Of Measurement</label> */}
                                 <select
                                   className="form-control"
                                   id="unit_of_measurement"
@@ -281,7 +284,7 @@ const AddProduct = () => {
                                     select unit of measurement
                                   </option>
                                   {uom.map(unit => (
-                                    <option key={unit.id} value={unit.id}>{unit.name}</option>
+                                    <option key={unit.id} value={unit.id}>{unit.unit_of_measure}</option>
                                   ))}
                                 </select>
                               </div>
@@ -367,7 +370,7 @@ const AddProduct = () => {
       </div>
       
        {/* Conditionally Render the New Uom Form */}
-       {showLocationForm && (
+       {showUomForm && (
           <div className="d-flex justify-content-center w-100 full-page-form">
             <div className="form-container">
               <form onSubmit={handleNewUomSubmit} className="w-100">
@@ -379,14 +382,14 @@ const AddProduct = () => {
                       className="form-control"
                       id="newUom"
                       placeholder="New Unit Of Measure"
-                      name="unit_of_measurement"
-                      value={newLocation.unit_of_measure}
-                      onChange={handleLocationChange}
+                      name="unit_of_measure"
+                      value={newUom.unit_of_measure}
+                      onChange={handleUomChange}
                     />
-                    {errors.unit_of_measurement && <small className="text-danger">{errors.unit_of_measurement[0]}</small>}
+                    {errors.unit_of_measure && <small className="text-danger">{errors.unit_of_measure[0]}</small>}
                   </div>
                   <div className="d-flex justify-content-between">
-                    <button type="button" className="btn pr-3" onClick={toggleLocationForm}>Cancel</button>
+                    <button type="button" className="btn pr-3" onClick={toggleUomForm}>Cancel</button>
                     <button type="submit" className="btn btn-primary">Save</button>
                   </div>
                 </div>
